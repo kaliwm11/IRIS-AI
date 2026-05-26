@@ -82,7 +82,7 @@ const IRIS = (props: IrisProps) => {
           <div className="flex flex-col leading-none">
             <span className="font-black tracking-[0.2em] text-sm text-zinc-100">IRIS AI</span>
             <span className="text-[11px] font-mono text-emerald-500/60 tracking-widest">
-              NEURAL INTERFACE
+              Voice Assistant
             </span>
           </div>
         </div>
@@ -113,7 +113,7 @@ const IRIS = (props: IrisProps) => {
 
         <div className="flex items-center gap-6 text-[11px] font-mono font-bold opacity-60">
           <div className="flex items-center gap-2 text-emerald-500">
-            <RiWifiLine /> <span>LINKED</span>
+            <RiWifiLine /> <span>Network</span>
           </div>
           <div className="hidden sm:flex items-center gap-2">
             <RiBatteryChargeLine /> <span>100%</span>
@@ -152,7 +152,7 @@ const IRIS = (props: IrisProps) => {
           <div className={`${glassPanel} w-96 p-1 border-emerald-500/30 flex flex-col shadow-2xl`}>
             <div className="flex items-center justify-between p-4 border-b border-white/5 bg-white/5">
               <span className="text-xs font-bold tracking-widest text-emerald-400">
-                ESTABLISH UPLINK
+                IRIS VISION - SELECT INPUT SOURCE
               </span>
               <button
                 onClick={() => setShowSourceModal(false)}
