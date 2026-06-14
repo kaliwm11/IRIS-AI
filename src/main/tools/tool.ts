@@ -316,15 +316,7 @@ export const systemToolDeclarations: FunctionDeclaration[] = [
     description: 'Take a screenshot.',
     parameters: { type: Type.OBJECT, properties: {}, required: [] }
   },
-  {
-    name: 'google_search',
-    description: 'Search Google.',
-    parameters: {
-      type: Type.OBJECT,
-      properties: { query: { type: Type.STRING } },
-      required: ['query']
-    }
-  },
+
   {
     name: 'click_on_screen',
     description: 'Click on a specific UI element on the screen based on its description.',
@@ -990,52 +982,61 @@ export const systemToolDeclarations: FunctionDeclaration[] = [
 ]
 
 const toolHandlers: Record<string, (args: any) => Promise<any>> = {
+  // 🌐 WEB, RESEARCH & GENERATION
+  google_search: (args) => executeWebSearch(args.query),
+  hack_live_website: (args) =>
+    hackWebsite({ url: args.url, mode: args.mode, customText: args.custom_text }),
+  deep_research: (args) =>
+    executeDeepResearch({ query: args.query, tavilyKey: args.tavilyKey, groqKey: args.groqKey }),
   build_animated_website: (args) =>
     buildAnimatedWebsite({ prompt: args.prompt, geminiKey: args.geminiKey }),
-  hack_website: (args) =>
-    hackWebsite({ url: args.url, mode: args.mode, customText: args.customText }),
-  smart_web_agent: (args) => executeWebSearch(args.query),
-  execute_deep_research: (args) =>
-    executeDeepResearch({ query: args.query, tavilyKey: args.tavilyKey, groqKey: args.groqKey }),
-  start_live_coding: (args) =>
-    startLiveCoding({ prompt: args.prompt, filename: args.filename, geminiKey: args.geminiKey }),
+  build_file: (args) =>
+    startLiveCoding({ prompt: args.prompt, filename: args.file_name, geminiKey: args.geminiKey }),
 
   // 💻 SYSTEM & OS CONTROL
-  open_app: (args) => openApp(args.appName),
-  close_app: (args) => closeApp(args.appName),
+  open_app: (args) => openApp(args.app_name), // FIX: Mapped correctly to app_name
+  close_app: (args) => closeApp(args.app_name), // FIX: Mapped correctly to app_name
   get_running_apps: () => getRunningApps(),
-  run_shell_command: (args) => runShellCommand({ command: args.command, cwd: args.cwd }),
-  teleport_windows: (args) => teleportWindows(args.commands), // commands is an array of { appName, position }
-  open_wormhole: (args) => openWormhole(args.port),
+  run_terminal: (args) => runShellCommand({ command: args.command, cwd: args.path }),
+  teleport_windows: (args) => teleportWindows(args.commands),
+  deploy_wormhole: (args) => openWormhole(args.port),
   close_wormhole: () => closeWormhole(),
 
   // 👻 GHOST AUTOMATION & UI INTERACTION
-  execute_ghost_sequence: (args) => executeGhostSequence(args.actions),
-  ghost_click_coordinate: (args) =>
-    ghostClickCoordinate({ x: args.x, y: args.y, doubleClick: args.doubleClick }),
-  ghost_scroll: (args) => ghostScroll({ direction: args.direction, amount: args.amount }),
-  copy_file_to_clipboard: (args) => copyFileToClipboard(args.filePath),
-  take_screenshot: () => takeScreenshot(),
-  get_screen_size: () => getScreenSize(),
+  ghost_type: (args) => executeGhostSequence([{ type: 'type', text: args.text }]),
+  execute_sequence: (args): any => {
+    try {
+      return executeGhostSequence(JSON.parse(args.json_actions))
+    } catch (e) {
+      return 'Error: Invalid JSON sequence provided.'
+    }
+  },
+  click_on_screen: (args) => ghostClickCoordinate({ x: args.x, y: args.y }),
+  scroll_screen: (args) => ghostScroll({ direction: args.direction, amount: args.amount }),
+  press_shortcut: (args) =>
+    executeGhostSequence([{ type: 'press', key: args.key, modifiers: args.modifiers }]),
   set_volume: (args) => setVolume(args.level),
+  take_screenshot: () => takeScreenshot(),
+  copy_file_to_clipboard: (args) => copyFileToClipboard(args.filePath),
+  get_screen_size: () => getScreenSize(),
 
   // 📁 FILE SYSTEM OPERATIONS
-  read_directory: (args) => readDirectory(args.dirPath),
-  read_file: (args) => readFile(args.filePath),
-  write_file: (args) => writeFile({ fileName: args.fileName, content: args.content }),
-  file_system_operation: (args) =>
+  read_directory: (args) => readDirectory(args.directory_path),
+  read_file: (args) => readFile(args.file_path),
+  write_file: (args) => writeFile({ fileName: args.file_name, content: args.content }),
+  manage_file: (args) =>
     executeFileOp({
       operation: args.operation,
-      sourcePath: args.sourcePath,
-      destPath: args.destPath
+      sourcePath: args.source_path,
+      destPath: args.dest_path
     }),
-  open_file: (args) => openFile(args.filePath),
+  open_file: (args) => openFile(args.file_path),
   reveal_file: (args) => revealFile(args.filePath),
-  open_in_vscode: (args) => openInVsCode(args.filePath),
+  open_in_vscode: (args) => openInVsCode(args.file_path || ''),
 
   // 🧠 NEURAL ENGINE & ORACLE
-  index_folder: (args) => indexFolder(args.folderPath),
-  search_local_files: (args) => searchFiles({ query: args.query, groqKey: args.groqKey }),
+  index_Folder: (args) => indexFolder(args.folder_path),
+  smart_file_search: (args) => searchFiles({ query: args.query, groqKey: args.groqKey }),
   ingest_codebase: (args) => ingestCodebase({ dirPath: args.dirPath, geminiKey: args.geminiKey }),
   consult_oracle: (args) =>
     consultOracle({ query: args.query, geminiKey: args.geminiKey, groqKey: args.groqKey }),
@@ -1043,9 +1044,9 @@ const toolHandlers: Record<string, (args: any) => Promise<any>> = {
 
   // 💾 MEMORY, NOTES & WORKFLOWS
   save_core_memory: (args) => saveCoreMemory(args.fact),
-  search_core_memory: () => searchCoreMemory(),
+  retrieve_core_memory: () => searchCoreMemory(),
   save_note: (args) => saveNote({ title: args.title, content: args.content }),
-  get_notes: () => getNotes(),
+  read_notes: () => getNotes(),
   delete_note: (args) => deleteNote(args.filename),
   load_workflows: () => loadWorkflows(),
   save_workflow: (args) =>
@@ -1059,9 +1060,9 @@ const toolHandlers: Record<string, (args: any) => Promise<any>> = {
 
   // 🎨 UI WIDGETS & GALLERY
   create_widget: (args) =>
-    createWidget({ htmlCode: args.htmlCode, width: args.width, height: args.height }),
-  close_all_widgets: () => closeAllWidgets(),
-  get_gallery: () => getGallery(),
+    createWidget({ htmlCode: args.html_code, width: args.width, height: args.height }),
+  close_widgets: () => closeAllWidgets(),
+  read_gallery: () => getGallery(),
   save_image_to_gallery: (args) =>
     saveImageToGallery({ title: args.title, base64Data: args.base64Data }),
   delete_image: (args) => deleteImage(args.filename),
@@ -1069,30 +1070,51 @@ const toolHandlers: Record<string, (args: any) => Promise<any>> = {
   save_image_external: (args) => saveImageExternal(args.sourcePath),
 
   // 📱 ADB MOBILE CONTROL
+  open_mobile_app: (args) => openAdbApp(args.package_name),
+  close_mobile_app: (args) => closeAdbApp(args.package_name),
+  tap_mobile_screen: (args) => tapAdb({ xPercent: args.x_percent, yPercent: args.y_percent }),
+  swipe_mobile_screen: (args) => swipeAdb(args.direction),
+  get_mobile_info: () => getMobileInfoAi(),
+  get_mobile_notifications: () => getAdbNotifications(),
+  push_file_to_mobile: (args) =>
+    pushFileToAdb({ sourcePath: args.source_path, destPath: args.dest_path }),
+  pull_file_from_mobile: (args) =>
+    pullFileFromAdb({ sourcePath: args.source_path, destPath: args.dest_path }),
+  toggle_mobile_hardware: (args) => toggleAdbHardware({ setting: args.setting, state: args.state }),
+
+  // Internal ADB mappings (not exposed to AI but used in backend)
   adb_get_history: () => getAdbHistory(),
   adb_connect: (args) => connectAdb({ ip: args.ip, port: args.port }),
   adb_disconnect: () => disconnectAdb(),
   adb_telemetry: () => getAdbTelemetry(),
-  adb_get_mobile_info_ai: () => getMobileInfoAi(),
-  adb_quick_action: (args) => executeAdbQuickAction(args.action), // 'camera' | 'wake' | 'lock' | 'home'
-  adb_hardware_toggle: (args) => toggleAdbHardware({ setting: args.setting, state: args.state }),
-  adb_open_app: (args) => openAdbApp(args.packageName),
-  adb_close_app: (args) => closeAdbApp(args.packageName),
-  adb_tap: (args) => tapAdb({ xPercent: args.xPercent, yPercent: args.yPercent }),
-  adb_swipe: (args) => swipeAdb(args.direction), // 'up' | 'down' | 'left' | 'right'
-  adb_get_notifications: () => getAdbNotifications(),
+  adb_quick_action: (args) => executeAdbQuickAction(args.action),
   adb_screenshot: () => takeAdbScreenshot(),
-  adb_push_file: (args) => pushFileToAdb({ sourcePath: args.sourcePath, destPath: args.destPath }),
-  adb_pull_file: (args) =>
-    pullFileFromAdb({ sourcePath: args.sourcePath, destPath: args.destPath }),
 
   // 📧 GMAIL INTEGRATION
-  gmail_read: (args) => readEmails(args.maxResults),
-  gmail_send: (args) => sendEmail({ to: args.to, subject: args.subject, body: args.body }),
-  gmail_draft: (args) => createDraft({ to: args.to, subject: args.subject, body: args.body }),
+  read_emails: (args) => readEmails(args.max_results || 5),
+  send_email: (args) => sendEmail({ to: args.to, subject: args.subject, body: args.body }),
+  draft_email: (args) => createDraft({ to: args.to, subject: args.subject, body: args.body }),
 
   // 🌍 TELEMETRY & CONTEXT
-  get_live_location: () => getLiveLocation()
+  get_live_location: () => getLiveLocation(),
+
+  // ⚠️ FALLBACKS FOR UNAVAILABLE MODULES (Prevents Crashes)
+  play_spotify_music: (): any => 'Error: The Spotify integration module is currently disconnected.',
+  send_whatsapp: (): any => 'Error: WhatsApp messaging is currently offline.',
+  schedule_whatsapp: (): any => 'Error: WhatsApp scheduling is offline.',
+  activate_protocol: (): any => 'Error: Protocol modules are offline.',
+  create_folder: (): any => 'Error: Folder creation is not implemented yet.',
+  open_project: (): any => 'Error: Project opener is not implemented yet.',
+  open_map: (): any => 'Error: Maps integration is offline.',
+  get_navigation: (): any => 'Error: Navigation integration is offline.',
+  generate_image: (): any => 'Error: Image generator is offline.',
+  analyze_direct_photo: (): any => 'Error: Vision analysis is offline.',
+  get_weather: (): any => 'Error: Weather API is disconnected.',
+  get_stock_price: (): any => 'Error: Stock market API is disconnected.',
+  compare_stocks: (): any => 'Error: Stock market API is disconnected.',
+  execute_macro: (): any => 'Error: Macro engine is offline.',
+  smart_drop_zones: (): any => 'Error: Smart Drop Zones are offline.',
+  lock_system_vault: (): any => 'Error: System vault locking is pending implementation.'
 }
 
 export async function executeSystemTool(fc: any) {
