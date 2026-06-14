@@ -1,10 +1,4 @@
 import { Type, FunctionDeclaration } from '@google/genai'
-import { fetchSystemStats, fetchInstalledApps, fetchStorageDrives } from '../logic/system'
-import { executeFSOperation } from '../logic/filesystem'
-import { manageApp } from '../logic/app-control'
-import { executeWebAction } from '../agent/browser-agent'
-import { scanDirectoryTree } from '../logic/fileScanner'
-import { openFileSystemItem } from '../logic/fileOpener'
 import { buildAnimatedWebsite } from '../auto/website-builder'
 import { hackWebsite } from '../logic/reality-hacker'
 import { executeWebSearch } from '../web/web-agent'
@@ -15,7 +9,15 @@ import { getRunningApps } from '../manager/file-launcher'
 import { runShellCommand } from '../logic/terminal-control'
 import { teleportWindows } from '../logic/telekinesis'
 import { closeWormhole, openWormhole } from '../services/wormhole'
-import { copyFileToClipboard, executeGhostSequence,, ghostScroll ghostClickCoordinate, takeScreenshot, getScreenSize, setVolume, setVolume } from '../logic/ghost-control'
+import {
+  copyFileToClipboard,
+  executeGhostSequence,
+  ghostScroll,
+  ghostClickCoordinate,
+  takeScreenshot,
+  getScreenSize,
+  setVolume
+} from '../logic/ghost-control'
 import { readDirectory } from '../manager/dir-load'
 import { readFile } from '../manager/file-read'
 import { writeFile } from '../manager/file-write'
@@ -25,10 +27,32 @@ import { indexFolder, searchFiles } from '../manager/file-search'
 import { cancelIngestion, consultOracle, ingestCodebase } from '../services/RAG-oracle'
 import { saveCoreMemory, searchCoreMemory } from '../manager/permanent-memory'
 import { deleteNote, getNotes, saveNote } from '../manager/notes-manager'
-import { deleteWorkflow, deleteWorkflow, loadWorkflows, saveWorkflow } from '../workflow/workflow-manager'
+import { deleteWorkflow, loadWorkflows, saveWorkflow } from '../workflow/workflow-manager'
 import { closeAllWidgets, createWidget } from '../auto/widget-manager'
-import { deleteImage, getGallery, openImageLocation, saveImageExternal, saveImageToGallery } from '../logic/gallery-manager'
-import { closeAdbApp, connectAdb, disconnectAdb, executeAdbQuickAction, getAdbHistory, getAdbNotifications, getAdbTelemetry, getMobileInfoAi, openAdbApp, pullFileFromAdb, pushFileToAdb, swipeAdb, takeAdbScreenshot, tapAdb, toggleAdbHardware } from '../mobile/adb-manager'
+import {
+  deleteImage,
+  getGallery,
+  openImageLocation,
+  saveImageExternal,
+  saveImageToGallery
+} from '../logic/gallery-manager'
+import {
+  closeAdbApp,
+  connectAdb,
+  disconnectAdb,
+  executeAdbQuickAction,
+  getAdbHistory,
+  getAdbNotifications,
+  getAdbTelemetry,
+  getMobileInfoAi,
+  openAdbApp,
+  pullFileFromAdb,
+  pushFileToAdb,
+  swipeAdb,
+  takeAdbScreenshot,
+  tapAdb,
+  toggleAdbHardware
+} from '../mobile/adb-manager'
 import { createDraft, readEmails, sendEmail } from '../logic/gmail-manager'
 
 export const systemToolDeclarations: FunctionDeclaration[] = [
