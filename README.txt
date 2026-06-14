@@ -339,6 +339,6 @@ IRIS is not a chatbot. It is a neural extension of your operating system.
 "System Online."
 
 
-Made with ❤️ by Harsh Pandey
+Made with ❤️ by Harsh
 
 ================================================================================
