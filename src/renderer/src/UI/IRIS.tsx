@@ -1,16 +1,11 @@
-import { useState, useEffect, Suspense, lazy } from 'react'
+import { useState, Suspense, lazy } from 'react'
 import {
-  RiWifiLine,
   RiShieldFlashLine,
   RiLayoutGridLine,
   RiBrainLine,
   RiFolderOpenLine,
   RiPhoneLine,
   RiSettings4Line,
-  RiBatteryChargeLine,
-  RiCameraLine,
-  RiComputerLine,
-  RiCloseLine,
   RiImageLine
 } from 'react-icons/ri'
 import { getSystemStatus } from '@renderer/services/system-info'
