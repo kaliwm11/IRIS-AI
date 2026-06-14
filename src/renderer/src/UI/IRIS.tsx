@@ -61,7 +61,7 @@ const IRIS = ({
           </div>
           <div className="flex flex-col leading-none">
             <span className="font-black tracking-widest text-[13px] text-zinc-100 uppercase">
-              IRIS_OS
+              IRIS AI
             </span>
             <span className="text-[9px] font-mono text-emerald-500/70 tracking-widest uppercase mt-0.5">
               System Core
