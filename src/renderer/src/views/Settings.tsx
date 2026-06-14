@@ -258,7 +258,7 @@ export default function SettingsView({ isSystemActive }: SettingsProps) {
         </div>
 
         {/* CONTENT AREA */}
-        <div className="relative min-h-[500px]">
+        <div className="relative min-h-125">
           <AnimatePresence mode="wait">
             {/* --- TAB 1: UPDATES --- */}
             {activeTab === 'updates' && (
@@ -384,7 +384,7 @@ export default function SettingsView({ isSystemActive }: SettingsProps) {
                 </GlassPanel>
 
                 {/* Release Notes */}
-                <GlassPanel className="md:col-span-5 p-0 flex flex-col h-full max-h-[400px]">
+                <GlassPanel className="md:col-span-5 p-0 flex flex-col h-full max-h-100">
                   <div className="bg-white/5 border-b border-white/10 px-6 py-4 flex items-center gap-3">
                     <RiInformationLine className="text-zinc-400" size={18} />
                     <span className="text-sm font-semibold text-white">Release Notes</span>
@@ -498,7 +498,7 @@ export default function SettingsView({ isSystemActive }: SettingsProps) {
                 transition={{ duration: 0.2 }}
                 className="w-full absolute"
               >
-                <GlassPanel className="p-0 overflow-hidden min-h-[400px]">
+                <GlassPanel className="p-0 overflow-hidden min-h-100">
                   {/* Lock Screen Overlay */}
                   <AnimatePresence>
                     {!isSecurityUnlocked && (
