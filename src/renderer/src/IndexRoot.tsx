@@ -23,7 +23,6 @@ const IndexRoot = () => {
 
   const [isBooting, setIsBooting] = useState(true)
   const [isConnected, setIsConnected] = useState(false)
-  const [activeTab, setActiveTab] = useState('Dashboard')
   const [systemStatus, setSystemStatus] = useState<Status>('STANDBY')
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
