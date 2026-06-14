@@ -1099,22 +1099,22 @@ const toolHandlers: Record<string, (args: any) => Promise<any>> = {
   get_live_location: () => getLiveLocation(),
 
   // ⚠️ FALLBACKS FOR UNAVAILABLE MODULES (Prevents Crashes)
-  play_spotify_music: () => 'Error: The Spotify integration module is currently disconnected.',
-  send_whatsapp: () => 'Error: WhatsApp messaging is currently offline.',
-  schedule_whatsapp: () => 'Error: WhatsApp scheduling is offline.',
-  activate_protocol: () => 'Error: Protocol modules are offline.',
-  create_folder: () => 'Error: Folder creation is not implemented yet.',
-  open_project: () => 'Error: Project opener is not implemented yet.',
-  open_map: () => 'Error: Maps integration is offline.',
-  get_navigation: () => 'Error: Navigation integration is offline.',
-  generate_image: () => 'Error: Image generator is offline.',
-  analyze_direct_photo: () => 'Error: Vision analysis is offline.',
-  get_weather: () => 'Error: Weather API is disconnected.',
-  get_stock_price: () => 'Error: Stock market API is disconnected.',
-  compare_stocks: () => 'Error: Stock market API is disconnected.',
-  execute_macro: () => 'Error: Macro engine is offline.',
-  smart_drop_zones: () => 'Error: Smart Drop Zones are offline.',
-  lock_system_vault: () => 'Error: System vault locking is pending implementation.'
+  play_spotify_music: (): any => 'Error: The Spotify integration module is currently disconnected.',
+  send_whatsapp: (): any => 'Error: WhatsApp messaging is currently offline.',
+  schedule_whatsapp: (): any => 'Error: WhatsApp scheduling is offline.',
+  activate_protocol: (): any => 'Error: Protocol modules are offline.',
+  create_folder: (): any => 'Error: Folder creation is not implemented yet.',
+  open_project: (): any => 'Error: Project opener is not implemented yet.',
+  open_map: (): any => 'Error: Maps integration is offline.',
+  get_navigation: (): any => 'Error: Navigation integration is offline.',
+  generate_image: (): any => 'Error: Image generator is offline.',
+  analyze_direct_photo: (): any => 'Error: Vision analysis is offline.',
+  get_weather: (): any => 'Error: Weather API is disconnected.',
+  get_stock_price: (): any => 'Error: Stock market API is disconnected.',
+  compare_stocks: (): any => 'Error: Stock market API is disconnected.',
+  execute_macro: (): any => 'Error: Macro engine is offline.',
+  smart_drop_zones: (): any => 'Error: Smart Drop Zones are offline.',
+  lock_system_vault: (): any => 'Error: System vault locking is pending implementation.'
 }
 
 export async function executeSystemTool(fc: any) {
