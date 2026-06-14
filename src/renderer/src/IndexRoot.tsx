@@ -66,14 +66,13 @@ const IndexRoot = () => {
   if (isOverlay) {
     return (
       <div className="w-screen h-screen overflow-hidden flex items-center justify-center bg-transparent">
-        {/* <MiniOverlay
+        <MiniOverlay
           isConnected={isConnected}
           toggleConnection={toggleConnection}
-          systemStatus={systemStatus}
           isSpeaking={isSpeaking}
           isMuted={isMuted}
           handleMicToggle={handleMicToggle}
-        /> */}
+        />
       </div>
     )
   }
