@@ -310,6 +310,7 @@ export default function LockScreen({ onUnlock }: LockScreenProps) {
                     ? 'bg-emerald-500/10 border-emerald-400/50 text-emerald-400'
                     : 'bg-black/60 border-white/10 text-zinc-400'
               }`}
+              
             >
               {!error && !isAuthorized && (
                 <RiFingerprintLine
