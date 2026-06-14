@@ -117,12 +117,6 @@ function PremiumGlassPanel({
       {/* Top accent line */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/10 to-transparent z-0" />
 
-      {/* Ambient glow background */}
-      <div
-        className={`pointer-events-none absolute -inset-1/3 opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-3xl z-0`}
-        style={{ background: config.glow }}
-      />
-
       {/* Noise texture */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.02] mix-blend-screen z-0" />
 
