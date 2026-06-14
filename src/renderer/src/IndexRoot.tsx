@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import MiniOverlay from './components/MiniOverlay'
-import { irisService } from './services/Iris-voice-ai'
-import { getScreenSourceId } from './hooks/CaptureDesktop'
 import IRIS from './UI/IRIS'
 import TerminalOverlay from './components/TerminalOverlay'
 import LeafletMapWidget from './Widgets/MapView'
