@@ -3,7 +3,6 @@ import * as fsSync from 'fs'
 import * as path from 'path'
 import { app } from 'electron'
 
-// Safely stores data in AppData/Roaming/YourAppName (Windows) or Application Support (Mac)
 const memoryDir = path.join(app.getPath('userData'), 'data')
 const memoryFile = path.join(memoryDir, 'memory.json')
 
