@@ -8,12 +8,10 @@ import {
   RiDragMove2Fill
 } from 'react-icons/ri'
 import { GiPowerButton } from 'react-icons/gi'
-import { Status } from '@renderer/types/panel'
 
 interface OverlayProps {
   isConnected: boolean
   toggleConnection: () => void
-  systemStatus: Status
   isSpeaking: boolean
   isMuted: boolean
   handleMicToggle: () => void
@@ -22,7 +20,6 @@ interface OverlayProps {
 const MiniOverlay = ({
   isConnected,
   toggleConnection,
-  systemStatus,
   isSpeaking,
   isMuted,
   handleMicToggle
