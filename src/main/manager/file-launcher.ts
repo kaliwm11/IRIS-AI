@@ -1,7 +1,6 @@
 import { exec } from 'child_process'
 import os from 'os'
 
-// Internal helper to run shell commands
 const runCommand = (cmd: string): Promise<string> => {
   return new Promise((resolve) => {
     exec(cmd, (err, stdout) => {
@@ -10,7 +9,6 @@ const runCommand = (cmd: string): Promise<string> => {
   })
 }
 
-// Exported directly to get a list of active applications
 export async function getRunningApps(): Promise<string[]> {
   try {
     if (os.platform() === 'win32') {

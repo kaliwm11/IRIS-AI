@@ -1,6 +1,5 @@
 import { shell } from 'electron'
 
-// Exported directly to open a file with its default system application
 export async function openFile(filePath: string): Promise<{ success: boolean; error?: string }> {
   try {
     const error = await shell.openPath(filePath)
@@ -15,7 +14,6 @@ export async function openFile(filePath: string): Promise<{ success: boolean; er
   }
 }
 
-// Exported directly to reveal a file in the native OS file explorer
 export async function revealFile(filePath: string): Promise<{ success: boolean; error?: string }> {
   try {
     shell.showItemInFolder(filePath)

@@ -7,7 +7,6 @@ import { google } from 'googleapis'
 
 const SCOPES = ['https://mail.google.com/']
 
-// Internal helpers to resolve paths safely at runtime
 function getTokenPath() {
   return path.join(app.getPath('userData'), 'gmail_token.json')
 }
@@ -16,7 +15,6 @@ function getCredentialsPath() {
   return path.join(process.cwd(), 'credentials.json')
 }
 
-// --- Internal Auth & Formatting Helpers ---
 
 async function loadSavedCredentialsIfExist(): Promise<any | null> {
   try {
@@ -50,7 +48,6 @@ async function authorize(): Promise<{ client: any; isNewLogin: boolean }> {
     await saveCredentials(client)
   }
 
-  // Regain focus on the main window after the browser OAuth flow
   const mainWindow = BrowserWindow.getAllWindows()[0]
   if (mainWindow) {
     if (mainWindow.isMinimized()) mainWindow.restore()
@@ -97,7 +94,6 @@ function parseMessageParts(part: any, result = { text: '', html: '', attachments
   return result
 }
 
-// --- Exported Direct Functions ---
 
 export async function readEmails(maxResults: number = 5) {
   try {

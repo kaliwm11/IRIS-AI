@@ -1,6 +1,5 @@
 import { exec } from 'child_process'
 
-// Internal helper to safely run PowerShell commands
 const runPowerShell = (cmd: string): Promise<string> => {
   return new Promise((resolve) => {
     exec(`powershell -Command "${cmd.replace(/"/g, '\\"')}"`, (error, stdout) => {
@@ -12,10 +11,8 @@ const runPowerShell = (cmd: string): Promise<string> => {
   })
 }
 
-// Exported directly to get the current system location
 export async function getLiveLocation() {
   try {
-    // Attempt 1: High-accuracy hardware location via Windows System.Device.Location
     const psCommand = `Add-Type -AssemblyName System.Device; $w = New-Object System.Device.Location.GeoCoordinateWatcher; $w.Start(); $t = 0; while($w.Position.Location.IsUnknown -and $t -lt 15) { Start-Sleep -Milliseconds 300; $t++ }; if(!$w.Position.Location.IsUnknown) { Write-Output "$($w.Position.Location.Latitude),$($w.Position.Location.Longitude)" }`
 
     const osLocation = await runPowerShell(psCommand)
@@ -39,7 +36,6 @@ export async function getLiveLocation() {
       }
     }
 
-    // Attempt 2: Fallback to IP-based location
     const ipRes = await fetch('http://ip-api.com/json/')
     const ipData = await ipRes.json()
 

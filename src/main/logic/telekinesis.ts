@@ -1,7 +1,6 @@
 import { screen } from 'electron'
 import { windowManager } from 'node-window-manager'
 
-// Define the shape of the command for TypeScript (optional, but good for clarity)
 export interface TeleportCommand {
   appName: string
   position:
@@ -15,7 +14,6 @@ export interface TeleportCommand {
     | 'center'
 }
 
-// Exported directly to handle window snapping and manipulation
 export async function teleportWindows(commands: TeleportCommand[]) {
   try {
     windowManager.requestAccessibility()
