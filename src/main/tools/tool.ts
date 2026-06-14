@@ -992,8 +992,8 @@ const toolHandlers: Record<string, (args: any) => Promise<any>> = {
   build_file: (args) =>
     startLiveCoding({ prompt: args.prompt, filename: args.file_name, geminiKey: args.geminiKey }),
 
-  open_app: (args) => openApp(args.app_name), // FIX: Mapped correctly to app_name
-  close_app: (args) => closeApp(args.app_name), // FIX: Mapped correctly to app_name
+  open_app: (args) => openApp(args.app_name),
+  close_app: (args) => closeApp(args.app_name),
   get_running_apps: () => getRunningApps(),
   run_terminal: (args) => runShellCommand({ command: args.command, cwd: args.path }),
   teleport_windows: (args) => teleportWindows(args.commands),
