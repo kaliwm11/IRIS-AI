@@ -140,7 +140,7 @@ export default function LeafletMapWidget() {
 
                 {!isRouteMode && (
                   <Marker position={position}>
-                    <Popup className="font-sans font-bold">{locationName}</Popup>
+                    <Popup>{locationName}</Popup>
                   </Marker>
                 )}
 
