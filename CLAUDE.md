@@ -3,6 +3,7 @@
 ## Project Identity
 
 IRIS is a high-performance, local-first **Agentic Operating System (OS)**. It is not a standard web app. It is an immersive desktop environment featuring:
+
 - Real-time conversational WebRTC audio pipeline (Gemini 2.5 Flash)
 - Biometric security (Face ID / Vision-based authentication)
 - Full file-system/hardware control via protected agent layer
@@ -14,6 +15,7 @@ IRIS is a high-performance, local-first **Agentic Operating System (OS)**. It is
 ## Tech Stack
 
 ### **Frontend**
+
 - **Framework:** Electron (Main) + React (Renderer) + Vite
 - **Language:** TypeScript (Strict typing mandatory)
 - **Styling:** Tailwind CSS v4 (No raw CSS)
@@ -21,6 +23,7 @@ IRIS is a high-performance, local-first **Agentic Operating System (OS)**. It is
 - **3D Engine:** Three.js / React Three Fiber (Optimized)
 
 ### **Backend / Agent Layer**
+
 - **AI Core:** Gemini 2.5 Flash (`BidiGenerateContent` WebRTC streaming)
 - **Agentic Framework:** LangGraph StateGraph (Manual node control for full customization)
 - **Agent State:** Custom TypeScript interfaces for type-safe state management
@@ -28,6 +31,7 @@ IRIS is a high-performance, local-first **Agentic Operating System (OS)**. It is
 - **LLM Integration:** @langchain/core with streaming support
 
 ### **Security & Protection**
+
 - **Code Protection:** V8 Bytecode compilation + Protected strings obfuscation
 - **Package Integrity:** ASAR with SHA256 validation on startup
 - **Sandbox:** Context isolation + No Node.js in renderer process
@@ -37,42 +41,288 @@ IRIS is a high-performance, local-first **Agentic Operating System (OS)**. It is
 
 ## Project Structure
 
-```
-IRIS/
-├── src/
-│   ├── main/                        # ← Protected by V8 bytecode
-│   │   ├── index.ts                 # Entry point
-│   │   ├── agents/
-│   │   │   ├── iris-ai.ts          # ⚠️ PROTECTED: Agent state graph + orchestration
-│   │   │   └── index.ts
-│   │   ├── tools/
-│   │   │   ├── tools.ts            # ⚠️ PROTECTED: Tool implementations
-│   │   │   ├── system.ts           # System execution tools
-│   │   │   ├── browser.ts          # Browser automation
-│   │   │   ├── vision.ts           # Vision processing
-│   │   │   └── voice.ts            # Voice processing
-│   │   ├── ipc/
-│   │   │   └── handlers.ts         # IPC event handlers (protected)
-│   │   └── utils/
-│   │       ├── encryption.ts       # Encryption utilities
-│   │       └── validation.ts       # Input validation
-│   ├── preload/
-│   │   └── index.ts                # ← Protected by V8 bytecode
-│   └── renderer/
-│       ├── src/
+```text
+├── assets
+│   ├── banner-old.jpeg
+│   └── banner.png
+├── bin
+│   └── iris-ai.ts
+├── build
+│   ├── entitlements.mac.plist
+│   ├── icon.icns
+│   ├── icon.ico
+│   └── icon.png
+├── resources
+│   ├── logo.png
+│   └── old-logo.png
+├── scripts
+│   └── dependabot.yml
+├── src
+│   ├── main
+│   │   ├── apps
+│   │   │   ├── spotifyManager.ts
+│   │   │   └── whatsappControl.ts
+│   │   ├── auto
+│   │   │   ├── website-builder.ts
+│   │   │   └── widget-manager.ts
+│   │   ├── config
+│   │   │   └── AxiosInstance.ts
+│   │   ├── constants
+│   │   │   └── StreamConfig.ts
+│   │   ├── gen
+│   │   │   └── Image-generator.ts
+│   │   ├── handler
+│   │   │   └── ui-ipc-bridge.ts
+│   │   ├── handlers
+│   │   │   ├── PhantomControl-handler.ts
+│   │   │   ├── ScreenPeeler-handler.ts
+│   │   │   └── SmartDropZone-Handler.ts
+│   │   ├── hooks
+│   │   │   └── iris-memory.ts
+│   │   ├── instructions
+│   │   │   └── iris-instructions.ts
+│   │   ├── lib
+│   │   │   └── system.ts
+│   │   ├── logic
+│   │   │   ├── app-launcher.ts
+│   │   │   ├── gallery-manager.ts
+│   │   │   ├── ghost-control.ts
+│   │   │   ├── gmail-manager.ts
+│   │   │   ├── live-location.ts
+│   │   │   ├── reality-hacker.ts
+│   │   │   ├── telekinesis.ts
+│   │   │   └── terminal-control.ts
+│   │   ├── manager
+│   │   │   ├── dir-load.ts
+│   │   │   ├── file-launcher.ts
+│   │   │   ├── file-open.ts
+│   │   │   ├── file-ops.ts
+│   │   │   ├── file-read.ts
+│   │   │   ├── file-search.ts
+│   │   │   ├── file-write.ts
+│   │   │   ├── notes-manager.ts
+│   │   │   └── permanent-memory.ts
+│   │   ├── mobile
+│   │   │   └── adb-manager.ts
+│   │   ├── security
+│   │   │   ├── lock-system.ts
+│   │   │   └── Security.ts
+│   │   ├── services
+│   │   │   ├── deep-research.ts
+│   │   │   ├── iris-coder.ts
+│   │   │   ├── RAG-oracle.ts
+│   │   │   └── wormhole.ts
+│   │   ├── tools
+│   │   │   └── tool.ts
+│   │   ├── utils
+│   │   │   ├── stocks.ts
+│   │   │   └── weather.ts
+│   │   ├── web
+│   │   │   └── web-agent.ts
+│   │   ├── workflow
+│   │   │   └── workflow-manager.ts
+│   │   └── index.ts
+│   ├── preload
+│   │   ├── index.d.ts
+│   │   └── index.ts
+│   └── renderer
+│       ├── src
+│       │   ├── assets
+│       │   │   ├── gsap_logo.png
+│       │   │   ├── main.css
+│       │   │   └── tailwind_logo.png
+│       │   ├── auth
+│       │   │   ├── AuthToken.tsx
+│       │   │   └── Login.tsx
+│       │   ├── code
+│       │   │   ├── macro-executor.ts
+│       │   │   └── website-builder-api.ts
+│       │   ├── components
+│       │   │   ├── UI
+│       │   │   │   ├── AICore.tsx
+│       │   │   │   ├── LeftPanels.tsx
+│       │   │   │   └── RightPanel.tsx
+│       │   │   ├── MacroManagementMenu.tsx
+│       │   │   ├── MiniOverlay.tsx
+│       │   │   ├── ParameterEditorDrawer.tsx
+│       │   │   ├── Sphere.tsx
+│       │   │   ├── TerminalOverlay.tsx
+│       │   │   ├── Titlebar.tsx
+│       │   │   ├── ToolNode.tsx
+│       │   │   └── ViewSkelrton.tsx
+│       │   ├── config
+│       │   │   └── AxiosInstance.ts
+│       │   ├── functions
+│       │   │   ├── apps-manager-api.ts
+│       │   │   ├── coding-manager-api.ts
+│       │   │   ├── DropZone-handler-api.ts
+│       │   │   ├── file-manager-api.ts
+│       │   │   ├── gallery-managet-api.ts
+│       │   │   ├── gmail-manager-api.ts
+│       │   │   ├── keybaord-manager.ts
+│       │   │   ├── keyboard-manger-api.ts
+│       │   │   ├── notes-manager-api.ts
+│       │   │   ├── Sporify-manager.ts
+│       │   │   └── whatsapp-manager-api.ts
+│       │   ├── handlers
+│       │   │   └── LockSystem-handler.ts
+│       │   ├── hooks
+│       │   │   └── CaptureDesktop.ts
+│       │   ├── middleware
+│       │   │   └── auth-middleware.tsx
+│       │   ├── public
+│       │   │   ├── img
+│       │   │   ├── models
+│       │   │   │   ├── age_gender_model-shard1
+│       │   │   │   ├── age_gender_model-weights_manifest.json
+│       │   │   │   ├── face_expression_model-shard1
+│       │   │   │   ├── face_expression_model-weights_manifest.json
+│       │   │   │   ├── face_landmark_68_model-shard1
+│       │   │   │   ├── face_landmark_68_model-weights_manifest.json
+│       │   │   │   ├── face_landmark_68_tiny_model-shard1
+│       │   │   │   ├── face_landmark_68_tiny_model-weights_manifest.json
+│       │   │   │   ├── face_recognition_model-shard1
+│       │   │   │   ├── face_recognition_model-shard2
+│       │   │   │   ├── face_recognition_model-weights_manifest.json
+│       │   │   │   ├── mtcnn_model-shard1
+│       │   │   │   ├── mtcnn_model-weights_manifest.json
+│       │   │   │   ├── ssd_mobilenetv1_model-shard1
+│       │   │   │   ├── ssd_mobilenetv1_model-shard2
+│       │   │   │   ├── ssd_mobilenetv1_model-weights_manifest.json
+│       │   │   │   ├── tiny_face_detector_model-shard1
+│       │   │   │   └── tiny_face_detector_model-weights_manifest.json
+│       │   │   └── Logo.png
+│       │   ├── services
+│       │   │   ├── get-apps.ts
+│       │   │   ├── IRIS_AI.ts
+│       │   │   ├── iris-ai-brain.ts
+│       │   │   └── system-info.ts
+│       │   ├── store
+│       │   │   └── auth-store.ts
+│       │   ├── tools
+│       │   │   ├── deepSearch-rag.ts
+│       │   │   ├── Earth-View.ts
+│       │   │   ├── Hacker-api.ts
+│       │   │   ├── Image-generator.ts
+│       │   │   ├── live-location.ts
+│       │   │   ├── Mobile-api.ts
+│       │   │   ├── rag-oracle-tool.ts
+│       │   │   ├── semantic-search-api.ts
+│       │   │   ├── stock-api.ts
+│       │   │   ├── weather-api.ts
+│       │   │   ├── widget-creator.ts
+│       │   │   └── wormhole-api.ts
+│       │   ├── types
+│       │   │   ├── form-type.ts
+│       │   │   └── panel.ts
+│       │   ├── UI
+│       │   │   ├── IRIS.tsx
+│       │   │   └── LockScreen.tsx
+│       │   ├── utils
+│       │   │   ├── audioUtils.ts
+│       │   │   └── ErrorBox.tsx
+│       │   ├── views
+│       │   │   ├── APP.tsx
+│       │   │   ├── Dashboard.tsx
+│       │   │   ├── Gallery.tsx
+│       │   │   ├── Notes.tsx
+│       │   │   ├── Phone.tsx
+│       │   │   ├── Settings.tsx
+│       │   │   └── WorkFlowEditor.tsx
+│       │   ├── Widgets
+│       │   │   ├── DeepResearch.tsx
+│       │   │   ├── EmailWidget.tsx
+│       │   │   ├── ImageWidget.tsx
+│       │   │   ├── LiveCodingWidget.tsx
+│       │   │   ├── MapView.tsx
+│       │   │   ├── RagOrcaleWidget.tsx
+│       │   │   ├── SematicSearch.tsx
+│       │   │   ├── SmartZoneWidget.tsx
+│       │   │   ├── StockWidget.tsx
+│       │   │   ├── WeatherWidget.tsx
+│       │   │   └── WormholeWidget.tsx
 │       │   ├── App.tsx
-│       │   ├── components/
-│       │   │   ├── LeftPanel.tsx   # System metrics & vision feed
-│       │   │   ├── MainChat.tsx    # Agent interaction
-│       │   │   └── ...
-│       │   ├── hooks/
-│       │   ├── services/
-│       │   └── types/
+│       │   ├── env.d.ts
+│       │   ├── ing.tsx
+│       │   ├── IRISRoot.tsx
+│       │   └── main.tsx
 │       └── index.html
-├── electron.vite.config.ts          # Build config with bytecode + protectedStrings
-├── electron-builder.yml             # ASAR integrity + security fuses
+├── testing
+│   ├── core
+│   │   ├── engine
+│   │   │   ├── v8
+│   │   │   │   ├── context.h
+│   │   │   │   └── isolate.cc
+│   │   │   └── bytecode.js
+│   │   ├── memory
+│   │   │   └── allocator
+│   │   │       └── gc.rs
+│   │   └── neural
+│   │       └── synapse
+│   │           ├── optimizer.py
+│   │           └── weights.tensor
+│   ├── docs
+│   │   ├── api
+│   │   │   ├── test
+│   │   │   │   └── test.yaml
+│   │   │   └── v1
+│   │   │       ├── v2
+│   │   │       └── swagger.yaml
+│   │   └── architecture
+│   │       ├── adr
+│   │       │   ├── 0001-use-rust.md
+│   │       │   └── 0002-switch-to-webgpu.md
+│   │       └── sdk
+│   ├── plugins
+│   │   ├── auth
+│   │   │   └── biometrics
+│   │   │       └── face_match.wasm
+│   │   └── render
+│   │       └── webgl
+│   │           └── shaders.glsl
+│   ├── scripts
+│   │   └── build
+│   │       └── webpack
+│   │           ├── dev.config.js
+│   │           └── prod.config.js
+│   ├── shared
+│   │   ├── types
+│   │   │   └── interfaces
+│   │   │       └── neural.d.ts
+│   │   └── utils
+│   │       └── crypto
+│   │           └── aes.ts
+│   ├── tests
+│   │   ├── e2e
+│   │   │   └── plugins
+│   │   │       └── auth.spec.ts
+│   │   └── unit
+│   │       └── core
+│   │           └── isolate.test.ts
+│   ├── CONTRIBUTING.md
+│   ├── docker-compose.yml
+│   ├── Jenkinsfile
+│   ├── LICENSE
+│   └── Makefile
+├── .env.example
+├── Agents.md
+├── banner.jpeg
+├── CLAUDE.md
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── DockerFile
+├── electron-builder.yml
+├── electron.vite.config.ts
+├── eslint.config.mjs
+├── LICENSE
+├── package-lock.json
 ├── package.json
-└── tsconfig.json
+├── README.md
+├── README.txt
+├── SECURITY.md
+├── tsconfig.json
+├── tsconfig.node.json
+└── tsconfig.web.json
 ```
 
 ---
@@ -116,6 +366,7 @@ Final .exe/.dmg/.AppImage (Distributed)
 ```
 
 **Configuration** (`electron.vite.config.ts`):
+
 ```typescript
 main: {
   build: {
@@ -154,11 +405,11 @@ The entire app is packaged in a **tamper-proof ASAR archive** with runtime integ
 ```yaml
 # electron-builder.yml
 electronFuses:
-  EnableEmbeddedAsarIntegrityValidation: true  # ← Validates all files at startup
-  OnlyLoadAppFromAsar: true                    # ← Only loads from ASAR
-  
+  EnableEmbeddedAsarIntegrityValidation: true # ← Validates all files at startup
+  OnlyLoadAppFromAsar: true # ← Only loads from ASAR
+
 asar:
-  integrity: true  # SHA256 hashing on build, validation on run
+  integrity: true # SHA256 hashing on build, validation on run
 ```
 
 **Result:** If ANY file is modified → **App crashes immediately** (tampering detected).
@@ -169,9 +420,9 @@ Renderer windows cannot directly access each other:
 
 ```yaml
 electronFuses:
-  RestrictedWindowAccess: true  # Windows must go through Main Process (IPC)
-  EnableContextIsolation: true  # Memory isolation
-  EnableNodeIntegration: false  # No Node.js in renderer
+  RestrictedWindowAccess: true # Windows must go through Main Process (IPC)
+  EnableContextIsolation: true # Memory isolation
+  EnableNodeIntegration: false # No Node.js in renderer
 ```
 
 ---
@@ -193,9 +444,9 @@ interface AgentState {
 
 // Create state graph with manual nodes
 const graph = new StateGraph<AgentState>()
-  .addNode('think', thinkingNode)           // LLM reasoning
-  .addNode('execute_tools', toolNode)       // Tool execution
-  .addNode('decide', decisionNode)          // Loop control
+  .addNode('think', thinkingNode) // LLM reasoning
+  .addNode('execute_tools', toolNode) // Tool execution
+  .addNode('decide', decisionNode) // Loop control
   .compile()
 ```
 
@@ -213,11 +464,11 @@ export function registerTool(tool: Tool): void {
 
 // In tools.ts (protected)
 export const IRIS_TOOLS: Tool[] = [
-  SystemExecutionTool,      // Safe command execution
-  FileOperationTool,        // Restricted file access
-  BrowserAutomationTool,    // Web automation
-  VisionProcessingTool,     // Image/video processing
-  VoiceProcessingTool,      // Audio processing
+  SystemExecutionTool, // Safe command execution
+  FileOperationTool, // Restricted file access
+  BrowserAutomationTool, // Web automation
+  VisionProcessingTool, // Image/video processing
+  VoiceProcessingTool // Audio processing
 ]
 ```
 
@@ -232,13 +483,13 @@ const audioBuffer: Float32Array[] = []
 // Streaming setup
 const connection = await bidiStream.send({
   realTimeUserInput: {
-    mediaChunks: audioBuffer  // PCM data
+    mediaChunks: audioBuffer // PCM data
   }
 })
 
 // Interrupt detection
 if (interruptFlag) {
-  connection.cancel()         // Instantly cancel active audio
+  connection.cancel() // Instantly cancel active audio
 }
 ```
 
@@ -266,7 +517,7 @@ const data = await window.electron.ipcRenderer.invoke('read-file', path)
 ipcMain.handle('read-file', async (event, filePath) => {
   // Validate path
   if (!isPathSafe(filePath)) throw new Error('Path traversal blocked')
-  
+
   // Execute
   return await fs.promises.readFile(filePath, 'utf-8')
 })
@@ -300,15 +551,15 @@ export function validateToolExecution(
   userContext?: { user_id?: string; permissions?: string[] }
 ): { valid: boolean; error?: string } {
   // Check tool exists
-  if (!IRIS_TOOLS.find(t => t.name === toolName)) {
+  if (!IRIS_TOOLS.find((t) => t.name === toolName)) {
     return { valid: false, error: `Tool ${toolName} not found` }
   }
-  
+
   // Check input size
   if (input.length > 50000) {
     return { valid: false, error: 'Input too large' }
   }
-  
+
   // Check permissions
   if (userContext?.permissions) {
     const hasPermission = userContext.permissions.includes(`tool:${toolName}`)
@@ -316,7 +567,7 @@ export function validateToolExecution(
       return { valid: false, error: `Permission denied: ${toolName}` }
     }
   }
-  
+
   return { valid: true }
 }
 ```
@@ -332,7 +583,7 @@ const audioBuffer: Float32Array[] = []
 
 audioProcessor.onprocessingdata = (chunk) => {
   audioBuffer.push(chunk)
-  
+
   if (audioBuffer.length >= BUFFER_SIZE) {
     // Send buffered audio
     bidiStream.send({
@@ -340,7 +591,7 @@ audioProcessor.onprocessingdata = (chunk) => {
         mediaChunks: audioBuffer
       }
     })
-    audioBuffer.length = 0  // Clear buffer
+    audioBuffer.length = 0 // Clear buffer
   }
 }
 ```
@@ -360,7 +611,7 @@ try {
   showErrorHUD({
     title: 'Execution Failed',
     message: error.message,
-    theme: 'iris',          // Custom theme
+    theme: 'iris', // Custom theme
     autoClose: 5000
   })
 }
@@ -446,7 +697,7 @@ VITE_VISION_API_KEY=...
 const apiKey = process.env.VITE_AGENT_API_KEY
 
 // ❌ WRONG: Hardcoded
-const apiKey = "sk_hardcoded_secret"
+const apiKey = 'sk_hardcoded_secret'
 ```
 
 ---
