@@ -4,11 +4,11 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const colors = {
   reset: '\x1b[0m',
-  green: '\x1b[38;2;16;185;129m', // emerald-500
-  cyan: '\x1b[38;2;6;182;212m', // cyan-500
-  purple: '\x1b[38;2;168;85;247m', // purple-500
-  red: '\x1b[38;2;239;68;68m', // red-500
-  orange: '\x1b[38;2;249;115;22m', // orange-500
+  green: '\x1b[38;2;16;185;129m',
+  cyan: '\x1b[38;2;6;182;212m',
+  purple: '\x1b[38;2;168;85;247m',
+  red: '\x1b[38;2;239;68;68m',
+  orange: '\x1b[38;2;249;115;22m',
   dim: '\x1b[2m',
   bold: '\x1b[1m'
 }
