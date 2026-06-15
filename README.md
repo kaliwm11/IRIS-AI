@@ -1020,10 +1020,11 @@ See [LICENSE](LICENSE) file for details.
 
 # 🎯 Get Started
 
-### Free Users
+### Free Users (UI Shell Only)
 
 ```bash
-git clone https://github.com/IRISX-AI/IRIS-AI
+# You can test the frontend UI, but the core AI execution is disabled.
+git clone [https://github.com/IRISX-AI/IRIS-AI](https://github.com/IRISX-AI/IRIS-AI)
 cd IRIS-AI
 npm install
 npm run dev
@@ -1032,16 +1033,23 @@ npm run dev
 ### Sponsors
 
 ```bash
-# Access private repository with examples
-# See sponsor-only documentation
-# Join Discord for support
+# 🟢 $5/mo Tier (IRIS Supporter):
+# -> Gain access to basic working code snippets.
+# -> (Note: This is not enough to run the full OS locally).
+
+# ⚡ $15/mo Tier (IRIS Insider) & Above:
+# -> Clone the private iris-insiders repository.
+# -> Unlock local execution and full working AI agents.
+# -> Join the private sponsor Discord for setup support.
 ```
 
 ### Enterprise
 
 ```bash
-# Full source access + custom support
-# Contact: enterprise@irisai.dev
+# 🏢 $50/mo Tier (Enterprise & Alpha):
+# -> Full unprotected source code access.
+# -> Commercial license + custom deployment support.
+# Contact: irisaidevop@gmail.com
 ```
 
 ---
