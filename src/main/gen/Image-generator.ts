@@ -6,7 +6,6 @@ import { InferenceClient } from '@huggingface/inference'
 export const handleImageGeneration = async (prompt: string) => {
   const mainWindow = BrowserWindow.getAllWindows()[0]
 
-  // Direct replacement for window.dispatchEvent -> push out via main window IPC
   if (mainWindow) {
     mainWindow.webContents.send('image-gen', { prompt: prompt, loading: true, base64: '' })
   }
@@ -15,7 +14,6 @@ export const handleImageGeneration = async (prompt: string) => {
     let hfKey = ''
     const secureConfigPath = path.join(app.getPath('userData'), 'iris_secure_vault.json')
 
-    // ── 1. Match your index.ts Secure Storage Sync Engine ──
     if (fs.existsSync(secureConfigPath)) {
       try {
         const data = JSON.parse(fs.readFileSync(secureConfigPath, 'utf8'))
@@ -39,18 +37,15 @@ export const handleImageGeneration = async (prompt: string) => {
 
     const client = new InferenceClient(hfKey)
 
-    // ── 2. Request Image Matrix ──
     const imageBlob: any = await client.textToImage({
       model: 'black-forest-labs/FLUX.1-schnell',
       inputs: prompt
     })
 
-    // ── 3. Convert Blob to Node Buffer Base64 (No browser window API dependencies) ──
     const arrayBuffer = await imageBlob.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
     const base64Image = `data:image/jpeg;base64,${buffer.toString('base64')}`
 
-    // Dispatch success to frontend
     if (mainWindow) {
       mainWindow.webContents.send('image-gen', {
         base64: base64Image,
@@ -68,7 +63,6 @@ export const handleImageGeneration = async (prompt: string) => {
       errorMessage = 'Model is warming up (Free Tier). Please try again in 20 seconds.'
     }
 
-    // Dispatch failure to frontend
     if (mainWindow) {
       mainWindow.webContents.send('image-gen', {
         base64: '',
