@@ -3,7 +3,6 @@ import { executeGhostSequence } from '../logic/ghost-control'
 
 export async function playSpotifyMusic(songName: string): Promise<string> {
   try {
-    // Fire open state immediately
     await openApp('spotify')
 
     const navActions = [
