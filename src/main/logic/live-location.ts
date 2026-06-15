@@ -12,9 +12,7 @@ const runPowerShell = (cmd: string): Promise<string> => {
 
 export async function getLiveLocation() {
   try {
-    // ── TIER 1: Exact Hardware Triangulation (Windows Only) ──
     if (os.platform() === 'win32') {
-      // THE FIX: Uses aggressive 7-second polling loop instead of a strict timeout.
       const psCommand = `Add-Type -AssemblyName System.Device; $w = New-Object System.Device.Location.GeoCoordinateWatcher(1); $w.Start(); $t = 0; while($w.Position.Location.IsUnknown -and $t -lt 35) { Start-Sleep -Milliseconds 200; $t++ }; if ($w.Permission -eq 'Denied') { Write-Output 'DENIED' } elseif ($w.Position.Location.IsUnknown) { Write-Output 'UNKNOWN' } else { Write-Output "$($w.Position.Location.Latitude),$($w.Position.Location.Longitude)" }`
 
       const osLocation = await runPowerShell(psCommand)
@@ -26,7 +24,6 @@ export async function getLiveLocation() {
           '⚠️ IRIS: Windows could not lock onto a GPS/Wi-Fi signal (Hardware limitation or Timeout).'
         )
       } else if (osLocation && osLocation.includes(',')) {
-        // SUCCESS: We got exact coordinates from the OS
         const [lat, lon] = osLocation.split(',')
 
         const geoRes = await fetch(
@@ -47,7 +44,6 @@ export async function getLiveLocation() {
       }
     }
 
-    // ── TIER 2: Best Available IP Fallback ──
     console.log('📡 IRIS: Falling back to IP-based location mapping...')
 
     const ipRes = await fetch('https://ipwho.is/')
