@@ -10,8 +10,7 @@ README.md                   @201Harsh
 CONTRIBUTING.md             @201Harsh
 SUPPORT.md                  @201Harsh
 
-# Security & CI/CD
-/.github/workflows/         @201Harsh
+# Security Configuration
 SECURITY.md                 @201Harsh
 electron-builder.yml        @201Harsh
 
