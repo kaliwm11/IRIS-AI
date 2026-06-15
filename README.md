@@ -579,7 +579,7 @@ IRIS/
 | --------------- | ----------- | ------------- |
 | `iris-ai.ts`    | ✅ Bytecode | Sponsors only |
 | `tools.ts`      | ✅ Bytecode | Sponsors only |
-| `src/renderer/` | ✅ React    | ✅ Open        | Public |
+| `src/renderer/` | ✅ React    | ✅ Open      | Public |
 | IPC handlers    | ✅ Bytecode | Built-in only |
 
 ---
