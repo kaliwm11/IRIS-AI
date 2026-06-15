@@ -4,7 +4,7 @@
 
 ### Voice-First Desktop AI Assistant
 
-**Build faster. Automate workflows. Control your desktop with Voice Commands.**
+**Build Faster. Automate Workflows. Control your Desktop with Voice Commands.**
 
 ---
 
