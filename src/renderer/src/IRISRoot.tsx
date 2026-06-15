@@ -49,7 +49,6 @@ const IndexRoot = () => {
       window.iris.startSession()
       setIsConnected(true)
       setSystemStatus('CONNECTING')
-      setIsMuted(true)
     }
   }
 
