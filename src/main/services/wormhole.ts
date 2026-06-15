@@ -5,7 +5,6 @@ let activeTunnel: any = null
 
 export async function openWormhole(port: number) {
   try {
-    // Clean up any existing tunnel first
     if (activeTunnel) {
       await activeTunnel.close()
       activeTunnel = null
@@ -18,7 +17,6 @@ export async function openWormhole(port: number) {
 
     const tunnelUrl = await activeTunnel.getURL()
 
-    // THE FIX: Beam the URL directly to the React Frontend
     const mainWindow = BrowserWindow.getAllWindows()[0]
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.send('wormhole-opened', { url: tunnelUrl })
@@ -38,7 +36,6 @@ export async function closeWormhole() {
       activeTunnel = null
     }
 
-    // THE FIX: Tell the frontend to close the widget
     const mainWindow = BrowserWindow.getAllWindows()[0]
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.send('wormhole-closed')
