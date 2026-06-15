@@ -28,7 +28,6 @@ export default function WeatherWidget() {
   const [isVisible, setIsVisible] = useState(false)
   const [weather, setWeather] = useState<WeatherData | null>(null)
 
-  // THE FIX: Intercept the event via the Electron IPC Bridge
   useEffect(() => {
     if (!window.electron?.ipcRenderer) return
 
