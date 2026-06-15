@@ -1,8 +1,10 @@
 import { exec } from 'child_process'
+import os from 'os'
 
 const runPowerShell = (cmd: string): Promise<string> => {
   return new Promise((resolve) => {
-    exec(`powershell -Command "${cmd.replace(/"/g, '\\"')}"`, (error, stdout) => {
+    // Added -NoProfile for faster execution
+    exec(`powershell -NoProfile -Command "${cmd.replace(/"/g, '\\"')}"`, (error, stdout) => {
       if (error) {
         return resolve('')
       }
@@ -13,47 +15,81 @@ const runPowerShell = (cmd: string): Promise<string> => {
 
 export async function getLiveLocation() {
   try {
-    const psCommand = `Add-Type -AssemblyName System.Device; $w = New-Object System.Device.Location.GeoCoordinateWatcher; $w.Start(); $t = 0; while($w.Position.Location.IsUnknown -and $t -lt 15) { Start-Sleep -Milliseconds 300; $t++ }; if(!$w.Position.Location.IsUnknown) { Write-Output "$($w.Position.Location.Latitude),$($w.Position.Location.Longitude)" }`
+    // ── TIER 1: High-Accuracy OS Native (Windows Only) ──
+    if (os.platform() === 'win32') {
+      // THE FIX: Added [System.Device.Location.GeoPositionAccuracy]::High
+      // This forces Windows to use Wi-Fi Triangulation & GPS hardware instead of cheap subnet guessing.
+      const psCommand = `Add-Type -AssemblyName System.Device; $w = New-Object System.Device.Location.GeoCoordinateWatcher([System.Device.Location.GeoPositionAccuracy]::High); $w.Start(); $t = 0; while($w.Position.Location.IsUnknown -and $t -lt 20) { Start-Sleep -Milliseconds 250; $t++ }; if(!$w.Position.Location.IsUnknown) { Write-Output "$($w.Position.Location.Latitude),$($w.Position.Location.Longitude)" }`
 
-    const osLocation = await runPowerShell(psCommand)
+      const osLocation = await runPowerShell(psCommand)
 
-    if (osLocation && osLocation.includes(',')) {
-      const [lat, lon] = osLocation.split(',')
+      if (osLocation && osLocation.includes(',')) {
+        const [lat, lon] = osLocation.split(',')
 
-      const geoRes = await fetch(
-        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
-      )
-      const geoData = await geoRes.json()
+        const geoRes = await fetch(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`,
+          { headers: { 'User-Agent': 'IRIS-X-Desktop-Application-v1' } }
+        )
+        const geoData = await geoRes.json()
 
-      return {
-        city: geoData.city || geoData.locality,
-        region: geoData.principalSubdivision,
-        country: geoData.countryName,
-        lat: parseFloat(lat),
-        lon: parseFloat(lon),
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        fullString: `${geoData.city || geoData.locality}, ${geoData.principalSubdivision}, ${geoData.countryName}`
+        return {
+          city: geoData.city || geoData.locality,
+          region: geoData.principalSubdivision,
+          country: geoData.countryName,
+          lat: parseFloat(lat),
+          lon: parseFloat(lon),
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          fullString: `${geoData.city || geoData.locality}, ${geoData.principalSubdivision}, ${geoData.countryName}`
+        }
       }
     }
 
-    const ipRes = await fetch('http://ip-api.com/json/')
-    const ipData = await ipRes.json()
+    // ── TIER 2: Premium HTTPS IP Geolocation (ipapi.co) ──
+    // Replaced the HTTP ip-api with a secure, highly accurate HTTPS alternative
+    try {
+      const ipapiRes = await fetch('https://ipapi.co/json/', {
+        headers: { 'User-Agent': 'IRIS-X-Desktop-Application-v1' }
+      })
+      const ipapiData = await ipapiRes.json()
 
-    if (ipData.status === 'success') {
+      if (ipapiData && ipapiData.city) {
+        return {
+          city: ipapiData.city,
+          region: ipapiData.region,
+          country: ipapiData.country_name,
+          lat: ipapiData.latitude,
+          lon: ipapiData.longitude,
+          timezone: ipapiData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+          fullString: `${ipapiData.city}, ${ipapiData.region}, ${ipapiData.country_name}`
+        }
+      }
+    } catch (e) {
+      // Silently catch network blocks and fall through to Tier 3
+    }
+
+    // ── TIER 3: Bulletproof Fallback (ipinfo.io) ──
+    // The absolute most reliable IP fallback in the industry.
+    const ipinfoRes = await fetch('https://ipinfo.io/json', {
+      headers: { 'User-Agent': 'IRIS-X-Desktop-Application-v1' }
+    })
+    const ipinfoData = await ipinfoRes.json()
+
+    if (ipinfoData && ipinfoData.loc) {
+      const [lat, lon] = ipinfoData.loc.split(',')
       return {
-        city: ipData.city,
-        region: ipData.regionName,
-        country: ipData.country,
-        lat: ipData.lat,
-        lon: ipData.lon,
-        timezone: ipData.timezone,
-        fullString: `${ipData.city}, ${ipData.regionName}, ${ipData.country}`
+        city: ipinfoData.city,
+        region: ipinfoData.region,
+        country: ipinfoData.country,
+        lat: parseFloat(lat),
+        lon: parseFloat(lon),
+        timezone: ipinfoData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+        fullString: `${ipinfoData.city}, ${ipinfoData.region}, ${ipinfoData.country}`
       }
     }
 
     return null
   } catch (error: any) {
-    console.log(error)
+    console.error('[LocationManager] System failed to fetch live location:', error)
     return null
   }
 }
