@@ -52,7 +52,8 @@ export async function getLiveLocation() {
     }
 
     return null
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error)
     return null
   }
 }
