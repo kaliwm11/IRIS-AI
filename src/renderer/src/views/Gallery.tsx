@@ -194,7 +194,6 @@ const GalleryView = () => {
                 >
                   {isVideo ? (
                     <video
-                      // 🚨 THE FIX: Use a custom scheme or ensure the URL is purely formatted for Electron
                       src={media.url}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
                       preload="metadata"
