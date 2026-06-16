@@ -1,3 +1,6 @@
+// ==========================================
+// 1. FIXED WIDGET COMPONENT (React + Framer)
+// ==========================================
 import { useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import gsap from 'gsap'
@@ -16,7 +19,6 @@ export default function ResearchWidget() {
   const containerRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
   const progressRef = useRef<HTMLDivElement>(null)
-  const summaryRef = useRef<HTMLDivElement>(null)
 
   const { contextSafe } = useGSAP({ scope: containerRef })
 
@@ -55,12 +57,7 @@ export default function ResearchWidget() {
 
     if (success && e.detail.summary) {
       setSummary(e.detail.summary)
-      if (summaryRef.current)
-        gsap.fromTo(
-          summaryRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.8, delay: 0.3 }
-        )
+      // Removed broken synchronous GSAP DOM selector check here
     }
 
     if (textRef.current) {
@@ -84,7 +81,7 @@ export default function ResearchWidget() {
       })
     }
 
-    setTimeout(() => setIsOpen(false), 6000)
+    setTimeout(() => setIsOpen(false), 8000) // Increased slightly to let user read markdown
   })
 
   useEffect(() => {
@@ -112,7 +109,7 @@ export default function ResearchWidget() {
         >
           <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4 relative z-10">
             <div className="flex items-center gap-3">
-              <Network className="w-6 h-6 text-cyan-400 animate-[pulse_2s_ease-in-out_infinite]" />
+              <Network className="w-6 h-6 text-cyan-400 animate-pulse" />
               <h3 className="text-sm font-bold tracking-[0.3em] text-cyan-400 uppercase">
                 Autonomous RAG Agent
               </h3>
@@ -133,7 +130,10 @@ export default function ResearchWidget() {
 
           <div className="flex items-center gap-4 mb-6 bg-black/40 py-3 px-4 rounded-lg border border-white/5 relative z-10">
             {statusText.includes('Tavily') ? (
-              <Globe className="w-5 h-5 text-cyan-500 animate-spin-slow" />
+              <Globe
+                className="w-5 h-5 text-cyan-500 animate-spin"
+                style={{ animationDuration: '3s' }}
+              />
             ) : statusText.includes('Llama') ? (
               <Cpu className="w-5 h-5 text-purple-500 animate-pulse" />
             ) : (
@@ -151,19 +151,23 @@ export default function ResearchWidget() {
             />
           </div>
 
-          {summary && (
-            <div
-              ref={summaryRef}
-              className="mt-4 p-4 bg-emerald-950/20 border border-emerald-500/20 rounded-lg relative z-10 max-h-37.5 overflow-hidden"
-            >
-              <p className="text-[10px] text-emerald-400/80 uppercase tracking-widest mb-2 font-bold">
-                Data Extracted
-              </p>
-              <p className="text-xs text-gray-300 font-mono leading-relaxed line-clamp-4">
-                {summary}
-              </p>
-            </div>
-          )}
+          {/* Framer Motion handles the dynamic mounting animation cleanly here */}
+          <AnimatePresence>
+            {summary && (
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                className="mt-4 p-4 bg-emerald-950/20 border border-emerald-500/20 rounded-lg relative z-10 max-h-37.5 overflow-y-auto"
+              >
+                <p className="text-[10px] text-emerald-400/80 uppercase tracking-widest mb-2 font-bold">
+                  Data Extracted
+                </p>
+                <p className="text-xs text-gray-300 font-mono leading-relaxed">{summary}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
