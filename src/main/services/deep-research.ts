@@ -36,13 +36,10 @@ export async function executeDeepResearch({ query }: { query: string }) {
           if (data.tavily) tavilyKey = Buffer.from(data.tavily, 'base64').toString('utf8')
           if (data.groq) groqKey = Buffer.from(data.groq, 'base64').toString('utf8')
         }
-      } catch (e) {
-        console.error('Vault read error:', e)
-      }
+      } catch (e) {}
     }
 
     if (!tavilyKey || !groqKey) {
-      console.log(tavilyKey)
       throw new Error('Missing API Keys. Please configure Tavily and Groq in the Command Center.')
     }
 
@@ -100,10 +97,8 @@ export async function executeDeepResearch({ query }: { query: string }) {
       })
     }
 
-    // 🚨 THE FIX: Return the actual data to the LLM so it can read it and talk to you about it.
     return `Deep research completed successfully. Here is the synthesized data to discuss with the user: \n\n${extractedSummary}`
   } catch (error: any) {
-    console.log(error)
     if (mainWindow) {
       mainWindow.webContents.send('deep-research-done', { success: false, summary: null })
     }
