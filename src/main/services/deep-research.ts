@@ -3,7 +3,6 @@ import { tavily } from '@tavily/core'
 import Groq from 'groq-sdk'
 import path from 'path'
 import fsSync from 'fs'
-import { error } from 'console'
 
 function emitProgress(
   mainWindow: BrowserWindow,
@@ -17,7 +16,6 @@ function emitProgress(
 export async function executeDeepResearch({ query }: { query: string }) {
   const mainWindow = BrowserWindow.getAllWindows()[0]
 
-  // 1. Open the UI Widget immediately
   if (mainWindow) {
     mainWindow.webContents.send('deep-research-start', { query })
   }
@@ -54,7 +52,6 @@ export async function executeDeepResearch({ query }: { query: string }) {
       totalFound: 1
     })
 
-    // 3. Execute Web Crawl
     const tvly = tavily({ apiKey: tavilyKey })
     const tavilyData = await tvly.search(query, {
       searchDepth: 'advanced',
@@ -72,7 +69,6 @@ export async function executeDeepResearch({ query }: { query: string }) {
       totalFound: 2
     })
 
-    // 4. Execute Fast Synthesis via Groq
     const groq = new Groq({ apiKey: groqKey })
     const prompt = `
       You are an elite research analyst. Answer: "${query}".
@@ -97,7 +93,6 @@ export async function executeDeepResearch({ query }: { query: string }) {
       totalFound: 3
     })
 
-    // 5. Tell the UI to close/display success
     if (mainWindow) {
       mainWindow.webContents.send('deep-research-done', {
         success: true,
