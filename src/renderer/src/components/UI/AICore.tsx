@@ -36,8 +36,8 @@ function ParticleShell({ isConnected, isSpeaking }: { isConnected: boolean; isSp
       orig[i * 3 + 1] = py
       orig[i * 3 + 2] = pz
 
-      s[i * 2] = Math.random() * Math.PI * 2 // phase
-      s[i * 2 + 1] = 0.5 + Math.random() * 0.8 // weight
+      s[i * 2] = Math.random() * Math.PI * 2
+      s[i * 2 + 1] = 0.5 + Math.random() * 0.8
     }
     return { positions: pos, original: orig, seeds: s }
   }, [])
