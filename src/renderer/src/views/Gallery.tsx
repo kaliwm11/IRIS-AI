@@ -236,7 +236,7 @@ const GalleryView = () => {
                   )}
 
                   {/* Info Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
+                  <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
                     <div className="mb-3">
                       <p className="text-xs text-white font-bold mb-1 truncate">
                         {media.displayName}
@@ -313,7 +313,7 @@ const GalleryView = () => {
 
             {/* Arrow Nav */}
             <div
-              className="absolute left-0 top-0 bottom-0 w-32 z-40 flex items-center justify-start pl-6 group cursor-pointer hover:bg-gradient-to-r from-black/40 to-transparent"
+              className="absolute left-0 top-0 bottom-0 w-32 z-40 flex items-center justify-start pl-6 group cursor-pointer hover:bg-linear-to-r from-black/40 to-transparent"
               onClick={() => navigateMedia(-1)}
             >
               <div className="p-4 bg-neutral-900 group-hover:bg-white text-white group-hover:text-black rounded-full transition-colors border border-white/10">
@@ -322,7 +322,7 @@ const GalleryView = () => {
             </div>
 
             <div
-              className="absolute right-0 top-0 bottom-0 w-32 z-40 flex items-center justify-end pr-6 group cursor-pointer hover:bg-gradient-to-l from-black/40 to-transparent"
+              className="absolute right-0 top-0 bottom-0 w-32 z-40 flex items-center justify-end pr-6 group cursor-pointer hover:bg-linear-to-l from-black/40 to-transparent"
               onClick={() => navigateMedia(1)}
             >
               <div className="p-4 bg-neutral-900 group-hover:bg-white text-white group-hover:text-black rounded-full transition-colors border border-white/10">
