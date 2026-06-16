@@ -3,6 +3,7 @@ import { tavily } from '@tavily/core'
 import Groq from 'groq-sdk'
 import path from 'path'
 import fsSync from 'fs'
+import { error } from 'console'
 
 function emitProgress(
   mainWindow: BrowserWindow,
@@ -44,6 +45,8 @@ export async function executeDeepResearch({ query }: { query: string }) {
     }
 
     if (!tailvyKey || !groqKey) {
+      console.log(error)
+      console.log(tailvyKey, groqKey)
       throw new Error('Missing API Keys. Please configure Tavily and Groq in the Command Center.')
     }
 
@@ -106,6 +109,7 @@ export async function executeDeepResearch({ query }: { query: string }) {
 
     return `Deep research completed. Summary provided to user interface.`
   } catch (error: any) {
+    console.log(error)
     if (mainWindow) {
       mainWindow.webContents.send('deep-research-done', { success: false, summary: null })
     }
