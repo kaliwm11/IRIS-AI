@@ -478,7 +478,7 @@ export async function executeCameraControl({
     await new Promise((r) => setTimeout(r, 4500))
 
     if (mode === 'video') {
-      await execAsync(`adb ${target} shell input keyevent KEYCODE_CAMERA`) // START RECORDING
+      await execAsync(`adb ${target} shell input keyevent KEYCODE_CAMERA`)
 
       await new Promise((r) => setTimeout(r, 1500))
 
@@ -503,7 +503,6 @@ export async function executeCameraControl({
 
       const newFile = latestFileStr.trim()
 
-      // If the file is valid and it's NOT the old file, the capture is successfully saved!
       if (newFile && newFile !== oldFile) {
         cleanFileName = newFile
         break
@@ -516,7 +515,6 @@ export async function executeCameraControl({
       return { success: false, error: 'Hardware timeout. File failed to save to device disk.' }
     }
 
-    // 8. Generate File Path & Pull to PC
     const extension = cleanFileName.split('.').pop() || (mode === 'video' ? 'mp4' : 'jpg')
     const timestamp = Date.now()
     const targetFilename = `IRIS_Capture_${timestamp}.${extension}`
@@ -524,7 +522,6 @@ export async function executeCameraControl({
 
     await execAsync(`adb ${target} pull "/sdcard/DCIM/Camera/${cleanFileName}" "${pcPath}"`)
 
-    // 9. Cover tracks: return to Home Screen
     await execAsync(`adb ${target} shell input keyevent KEYCODE_HOME`)
 
     return {
