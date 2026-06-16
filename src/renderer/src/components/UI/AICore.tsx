@@ -18,7 +18,7 @@ function ParticleShell({ isConnected, isSpeaking }: { isConnected: boolean; isSp
   const { positions, original, seeds } = useMemo(() => {
     const pos = new Float32Array(COUNT * 3)
     const orig = new Float32Array(COUNT * 3)
-    const s = new Float32Array(COUNT * 2) // [phase, weight]
+    const s = new Float32Array(COUNT * 2)
 
     for (let i = 0; i < COUNT; i++) {
       const phi = Math.acos(1 - (2 * (i + 0.5)) / COUNT)
