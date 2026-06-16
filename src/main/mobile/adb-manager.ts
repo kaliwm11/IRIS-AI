@@ -484,12 +484,12 @@ export async function executeCameraControl({
 
       await new Promise((r) => setTimeout(r, duration * 1000))
 
-      await execAsync(`adb ${target} shell input keyevent KEYCODE_CAMERA`) // STOP RECORDING
+      await execAsync(`adb ${target} shell input keyevent KEYCODE_CAMERA`)
 
       await new Promise((r) => setTimeout(r, 4000))
     } else {
-      await execAsync(`adb ${target} shell input keyevent KEYCODE_CAMERA`) // SNAP PHOTO
-      await new Promise((r) => setTimeout(r, 2500)) // HDR Processing delay
+      await execAsync(`adb ${target} shell input keyevent KEYCODE_CAMERA`)
+      await new Promise((r) => setTimeout(r, 2500))
     }
 
     let cleanFileName = ''
