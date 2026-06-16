@@ -337,10 +337,6 @@ app.whenReady().then(() => {
     return await executeDeepResearch({ query })
   })
 
-  ipcMain.handle('adb-get-history', async () => {
-    return await getAdbHistory()
-  })
-
   ipcMain.handle('adb-connect', async (_, args) => {
     return await connectAdb({ ip: args.ip, port: args.port })
   })
