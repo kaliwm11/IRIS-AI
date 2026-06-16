@@ -143,7 +143,6 @@ const GalleryView = () => {
 
   return (
     <div className="flex-1 bg-neutral-950 h-full p-8 md:p-10 animate-in fade-in duration-500 flex flex-col overflow-hidden selection:bg-emerald-500/30 text-white font-sans">
-      {/* Premium Header */}
       <div className="flex items-end justify-between pb-6 border-b border-white/5 mb-8 shrink-0">
         <div className="flex items-center gap-4">
           <div className="p-3 bg-linear-to-br from-emerald-500/20 to-teal-500/5 rounded-2xl border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.15)] relative overflow-hidden">
@@ -168,7 +167,6 @@ const GalleryView = () => {
         </div>
       </div>
 
-      {/* Gallery Grid */}
       <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
         {allAssets.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-neutral-600 gap-5">
@@ -198,7 +196,6 @@ const GalleryView = () => {
                   }}
                   className="group relative aspect-square md:aspect-4/5 bg-neutral-900 rounded-2xl border border-white/5 overflow-hidden hover:border-emerald-500/50 hover:shadow-[0_10px_40px_-10px_rgba(16,185,129,0.3)] transition-all duration-500 cursor-pointer"
                 >
-                  {/* Thumbnail Rendering */}
                   {isVideo ? (
                     <video
                       src={asset.url}
@@ -220,7 +217,6 @@ const GalleryView = () => {
                     />
                   )}
 
-                  {/* Error State Fallback */}
                   <div className="hidden absolute inset-0 items-center justify-center flex-col gap-3 bg-neutral-950">
                     <RiFileWarningLine className="text-red-500/40" size={32} />
                     <span className="text-[10px] font-bold tracking-widest text-neutral-500">
@@ -228,7 +224,6 @@ const GalleryView = () => {
                     </span>
                   </div>
 
-                  {/* Video Indicator Overlay */}
                   {isVideo && (
                     <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10 flex items-center gap-1.5 z-10">
                       <RiVideoLine size={12} className="text-emerald-400" />
@@ -236,7 +231,6 @@ const GalleryView = () => {
                     </div>
                   )}
 
-                  {/* Hover Information Overlay */}
                   <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5 translate-y-4 group-hover:translate-y-0">
                     <div className="mb-4">
                       <p className="text-xs text-white font-black mb-1 tracking-wider capitalize truncate">
@@ -265,7 +259,6 @@ const GalleryView = () => {
                     </div>
                   </div>
 
-                  {/* Center Play Button for Videos */}
                   {isVideo && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity">
                       <RiPlayCircleLine
@@ -281,7 +274,6 @@ const GalleryView = () => {
         )}
       </div>
 
-      {/* Immersive Detail Overlay */}
       <AnimatePresence>
         {selectedAsset && (
           <motion.div
@@ -291,7 +283,6 @@ const GalleryView = () => {
             transition={{ duration: 0.4 }}
             className="fixed inset-0 z-9999 bg-black/90 flex items-center justify-center"
           >
-            {/* Top Bar Controls */}
             <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50 bg-linear-to-b from-black/80 to-transparent">
               <div className="text-left px-5 py-2.5 bg-black/40 backdrop-blur-xl rounded-xl border border-white/5">
                 <h3 className="text-lg font-black text-white capitalize tracking-wide flex items-center gap-3">
@@ -315,7 +306,6 @@ const GalleryView = () => {
               </button>
             </div>
 
-            {/* Navigation Areas */}
             <div
               className="absolute left-0 top-0 bottom-0 w-32 z-40 flex items-center justify-start pl-8 group cursor-pointer hover:bg-linear-to-r hover:from-black/60 hover:to-transparent transition-colors"
               onClick={() => navigateAsset(-1)}
@@ -334,7 +324,6 @@ const GalleryView = () => {
               </div>
             </div>
 
-            {/* Main Media Viewer */}
             <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden pt-12 pb-24 px-32">
               <AnimatePresence initial={false} custom={direction} mode="wait">
                 <motion.div
@@ -364,7 +353,6 @@ const GalleryView = () => {
               </AnimatePresence>
             </div>
 
-            {/* Bottom Action Bar */}
             <div className="absolute bottom-8 z-50 flex gap-4 p-2 bg-black/50 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl">
               <button
                 onClick={(e) => openLocation(selectedAsset.path, e)}
