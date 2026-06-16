@@ -190,15 +190,24 @@ const GalleryView = () => {
                     setDirection(0)
                     setSelectedMedia(media)
                   }}
-                  className="group relative aspect-square md:aspect-4/5 bg-neutral-900 rounded-2xl border border-white/5 overflow-hidden hover:border-emerald-500/50 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                  className="group relative aspect-square md:aspect-[4/5] bg-neutral-900 rounded-2xl border border-white/5 overflow-hidden hover:border-emerald-500/50 hover:shadow-lg transition-all duration-300 cursor-pointer"
                 >
                   {isVideo ? (
+                    // 🚨 THE FIX: Appended #t=0.001 to force thumbnail render, added hover play
                     <video
-                      src={media.url}
+                      src={`${media.url}#t=0.001`}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
                       preload="metadata"
                       muted
                       playsInline
+                      loop
+                      onMouseEnter={(e) => {
+                        e.currentTarget.play().catch(() => {})
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.pause()
+                        e.currentTarget.currentTime = 0.001
+                      }}
                     />
                   ) : (
                     <img
@@ -221,7 +230,7 @@ const GalleryView = () => {
                   </div>
 
                   {isVideo && (
-                    <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10 flex items-center gap-1.5 z-10">
+                    <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10 flex items-center gap-1.5 z-10 pointer-events-none">
                       <RiVideoLine size={12} className="text-emerald-400" />
                       <span className="text-[10px] font-bold tracking-widest text-white">
                         VIDEO
@@ -229,7 +238,7 @@ const GalleryView = () => {
                     </div>
                   )}
 
-                  <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4 pointer-events-none">
                     <div className="mb-3">
                       <p className="text-xs text-white font-bold mb-1 truncate">
                         {media.displayName}
@@ -239,7 +248,7 @@ const GalleryView = () => {
                       </p>
                     </div>
 
-                    <div className="flex gap-2 justify-end">
+                    <div className="flex gap-2 justify-end pointer-events-auto">
                       <button
                         onClick={(e) => openLocation(media.path, e)}
                         className="p-2 bg-neutral-800 text-white rounded hover:bg-emerald-500 hover:text-black transition-colors"
@@ -276,9 +285,8 @@ const GalleryView = () => {
             animate={{ opacity: 1, backdropFilter: 'blur(20px)' }}
             exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-9999 bg-black/90 flex items-center justify-center"
+            className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center"
           >
-            {/* Top Bar */}
             <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50">
               <div className="text-left px-4 py-2 bg-neutral-900/60 backdrop-blur-md rounded-lg border border-white/10">
                 <h3 className="text-base font-bold text-white tracking-wide flex items-center gap-2">
@@ -303,7 +311,7 @@ const GalleryView = () => {
             </div>
 
             <div
-              className="absolute left-0 top-0 bottom-0 w-32 z-40 flex items-center justify-start pl-6 group cursor-pointer hover:bg-linear-to-r from-black/40 to-transparent"
+              className="absolute left-0 top-0 bottom-0 w-32 z-40 flex items-center justify-start pl-6 group cursor-pointer hover:bg-gradient-to-r from-black/40 to-transparent"
               onClick={() => navigateMedia(-1)}
             >
               <div className="p-4 bg-neutral-900 group-hover:bg-white text-white group-hover:text-black rounded-full transition-colors border border-white/10">
@@ -312,7 +320,7 @@ const GalleryView = () => {
             </div>
 
             <div
-              className="absolute right-0 top-0 bottom-0 w-32 z-40 flex items-center justify-end pr-6 group cursor-pointer hover:bg-linear-to-l from-black/40 to-transparent"
+              className="absolute right-0 top-0 bottom-0 w-32 z-40 flex items-center justify-end pr-6 group cursor-pointer hover:bg-gradient-to-l from-black/40 to-transparent"
               onClick={() => navigateMedia(1)}
             >
               <div className="p-4 bg-neutral-900 group-hover:bg-white text-white group-hover:text-black rounded-full transition-colors border border-white/10">
