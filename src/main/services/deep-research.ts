@@ -20,21 +20,21 @@ export async function executeDeepResearch({
   groqKey: string
 }) {
   try {
-    let tavilyKey = ''
+    let tailvyKey = ''
     const secureConfigPath = path.join(app.getPath('userData'), 'iris_secure_vault.json')
 
     if (fsSync.existsSync(secureConfigPath)) {
       try {
         const data = JSON.parse(fsSync.readFileSync(secureConfigPath, 'utf8'))
         if (safeStorage.isEncryptionAvailable()) {
-          tavilyKey = safeStorage.decryptString(Buffer.from(data.tavily, 'base64'))
+          tailvyKey = safeStorage.decryptString(Buffer.from(data.tavily, 'base64'))
         } else {
-          tavilyKey = Buffer.from(data.tavily, 'base64').toString('utf8')
+          tailvyKey = Buffer.from(data.tavily, 'base64').toString('utf8')
         }
       } catch (e) {}
     }
 
-    if (!tavilyKey || !groqKey) {
+    if (!tailvyKey || !groqKey) {
       throw new Error('Missing API Keys. Please configure Tavily and Groq in the Command Center.')
     }
 
@@ -44,7 +44,7 @@ export async function executeDeepResearch({
       totalFound: 1
     })
 
-    const tvly = tavily({ apiKey: tavilyKey })
+    const tvly = tavily({ apiKey: tailvyKey })
     const tavilyData = await tvly.search(query, {
       searchDepth: 'advanced',
       includeAnswer: true,
