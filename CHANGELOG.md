@@ -7,7 +7,7 @@ Format: `[version] — [codename] — [date]`
 
 ## [v1.5.1] — The Voice Rewrite
 
-> _June 2026_
+> _June 25, 2026_
 
 ### 🎙️ Voice Architecture
 
@@ -49,7 +49,7 @@ Format: `[version] — [codename] — [date]`
 
 ## [v1.3.0] — Stability & Interface Update
 
-> _May 26, 2026_
+> _June 2, 2026_
 
 ### 🛠️ Bug Fixes
 
@@ -76,7 +76,7 @@ Format: `[version] — [codename] — [date]`
 
 ## [v1.2.4] — Infrastructure & Autonomy Update
 
-> _May 24, 2026_
+> _May 254, 2026_
 
 ### 🚨 Critical Hotfixes
 
@@ -97,7 +97,7 @@ Format: `[version] — [codename] — [date]`
 
 ## [v1.2.2] — Telemetry & Stability Patch
 
-> _April 19, 2026_
+> _May 23, 2026_
 
 ### 🎨 Telemetry HUD (Full Redesign)
 
@@ -124,7 +124,7 @@ Format: `[version] — [codename] — [date]`
 
 ## [v1.2.1] — Quantum Core & UI Overhaul
 
-> _April 14, 2026_
+> _May 23, 2026_
 
 ### ⚡ Zero-Latency Voice Engine (Full Rewrite)
 
@@ -157,7 +157,7 @@ Format: `[version] — [codename] — [date]`
 
 ## [v1.1.4] — Firmware Control Patch
 
-> _April 14, 2026_
+> _May 20, 2026_
 
 ### 🎛️ System Updates UI
 
@@ -171,7 +171,7 @@ Format: `[version] — [codename] — [date]`
 
 ## [v1.1.2] — Telemetry & Vault Patch
 
-> _April 14, 2026_
+> _May 14, 2026_
 
 ### 📊 Network Telemetry
 
@@ -188,7 +188,7 @@ Format: `[version] — [codename] — [date]`
 
 ## [v1.1.0] — The Agentic Core
 
-> _March 2026_
+> _May 2026_
 
 ### 🧠 Agent System
 
@@ -221,7 +221,7 @@ Format: `[version] — [codename] — [date]`
 
 ## [v1.0.1] — Hotfix
 
-> _February 2026_
+> _April 2026_
 
 - Fixed auto-updater `latest.yml` 404 on fresh installs
 - Resolved `.env` key loss on reinstall — keys now preserved across updates
