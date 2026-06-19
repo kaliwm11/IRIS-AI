@@ -4,7 +4,6 @@ import path from 'path'
 import fs from 'fs/promises'
 import { app, shell } from 'electron'
 
-// Helper utility for terminal system queries
 const runCommand = (cmd: string): Promise<string> => {
   return new Promise((resolve) => {
     exec(cmd, (err, stdout) => {
@@ -13,8 +12,6 @@ const runCommand = (cmd: string): Promise<string> => {
   })
 }
 
-/**
- */
 export async function getRunningApps(): Promise<string[]> {
   try {
     if (os.platform() === 'win32') {
