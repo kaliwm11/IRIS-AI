@@ -13,7 +13,6 @@ const runCommand = (cmd: string): Promise<string> => {
   })
 }
 
-// ─── 1. NATIVE OS GEOLOCATION (100% ACCURATE & FREE) ───
 async function getWindowsNativeLocation(): Promise<{ lat: number; lon: number } | null> {
   const scriptContent = `
 Add-Type -AssemblyName System.Device
