@@ -306,8 +306,6 @@ app.whenReady().then(() => {
     }
   })
 
-  initWakeWord(mainWindow?.webContents)
-
   ipcMain.on('iris:start-session', (event) => {
     console.log('Starting IRIS...')
     StartIRIS(event)
@@ -375,6 +373,10 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+  
+  if (mainWindow) {
+    initWakeWord(mainWindow.webContents)
+  }
 
   globalShortcut.register('CommandOrControl+Shift+I', () => toggleOverlayMode())
   ipcMain.on('toggle-overlay', () => toggleOverlayMode())
