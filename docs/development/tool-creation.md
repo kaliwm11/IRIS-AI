@@ -74,3 +74,4 @@ contextBridge.exposeInMainWorld('electron', {
 ```
 
 By following this pattern, you ensure that new capabilities are deeply integrated into the native OS while maintaining the strict security boundary of the IPC Bridge.
+

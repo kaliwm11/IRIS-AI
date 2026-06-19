@@ -35,6 +35,7 @@ import {
 import registerSystemHandlers from './lib/system'
 import registerFrontendIPC from './handler/ui-ipc-bridge'
 import { executeDeepResearch } from './services/deep-research'
+import { initWakeWord } from './voice/WakeupWord'
 
 app.commandLine.appendSwitch('use-fake-ui-for-media-stream')
 
@@ -372,6 +373,10 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+
+  if (mainWindow) {
+    initWakeWord(mainWindow.webContents)
+  }
 
   globalShortcut.register('CommandOrControl+Shift+I', () => toggleOverlayMode())
   ipcMain.on('toggle-overlay', () => toggleOverlayMode())

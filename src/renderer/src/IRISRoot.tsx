@@ -28,12 +28,27 @@ const IndexRoot = () => {
 
   useEffect(() => {
     if ((window as any).iris) {
-      ;(window as any).iris.onSystemStatus((status: any) => {
+      ;(window as any).iris.onSystemStatus((status: Status) => {
         setSystemStatus(status)
+
+        if (status === 'ACTIVE' || status === 'CONNECTING') {
+          setIsConnected(true)
+        } else if (status === 'STANDBY' || status === 'ERROR') {
+          setIsConnected(false)
+          setIsMuted(false)
+        }
       })
       ;(window as any).iris.onSpeakingState((speaking: boolean) => {
         setIsSpeaking(speaking)
       })
+
+      if ((window as any).iris.onWakeWordTriggered) {
+        ;(window as any).iris.onWakeWordTriggered(() => {
+          console.log('[UI] Wake word recognized! Booting UI...')
+          setIsConnected(true)
+          setSystemStatus('CONNECTING')
+        })
+      }
     }
   }, [])
 

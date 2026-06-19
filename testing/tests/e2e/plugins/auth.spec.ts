@@ -1,2 +1,3 @@
-import { test } from "@playwright/test";
-test("auth works", () => {});
+const authtest = ()=>{
+    
+}
