@@ -15,7 +15,6 @@ const runCommand = (cmd: string): Promise<string> => {
 
 // ─── 1. NATIVE OS GEOLOCATION (100% ACCURATE & FREE) ───
 async function getWindowsNativeLocation(): Promise<{ lat: number; lon: number } | null> {
-  // Uses Windows' built-in Location Services (Wi-Fi Triangulation/GPS)
   const scriptContent = `
 Add-Type -AssemblyName System.Device
 $GeoWatcher = New-Object System.Device.Location.GeoCoordinateWatcher
