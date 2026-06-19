@@ -38,14 +38,12 @@ if ($GeoWatcher.Permission -eq 'Denied' -or $GeoWatcher.Status -ne 'Ready') {
 $GeoWatcher.Stop()
   `
 
-  // Write the script to a secure temp file to prevent command-line character breaking
   const tempPath = path.join(os.tmpdir(), 'iris_get_location.ps1')
   fs.writeFileSync(tempPath, scriptContent)
 
   const cmd = `powershell -NoProfile -ExecutionPolicy Bypass -File "${tempPath}"`
   const output = await runCommand(cmd)
 
-  // Clean up the temp file
   try {
     fs.unlinkSync(tempPath)
   } catch (e) {}
