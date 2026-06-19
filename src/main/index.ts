@@ -35,6 +35,7 @@ import {
 import registerSystemHandlers from './lib/system'
 import registerFrontendIPC from './handler/ui-ipc-bridge'
 import { executeDeepResearch } from './services/deep-research'
+import { initWakeWord } from './voice/WakeupWord'
 
 app.commandLine.appendSwitch('use-fake-ui-for-media-stream')
 
@@ -304,6 +305,8 @@ app.whenReady().then(() => {
       mainWindow.webContents.send('oauth-callback', url)
     }
   })
+
+  initWakeWord(mainWindow?.webContents)
 
   ipcMain.on('iris:start-session', (event) => {
     console.log('Starting IRIS...')
