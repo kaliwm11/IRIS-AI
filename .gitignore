@@ -10,8 +10,8 @@ out
 .env
 .env.*
 !.env.example
-
 .idea/
+
 
 
 versions
