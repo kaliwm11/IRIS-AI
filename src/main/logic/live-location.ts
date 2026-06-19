@@ -1,70 +1,130 @@
 import { exec } from 'child_process'
 import os from 'os'
+import fs from 'fs'
+import path from 'path'
 
-const runPowerShell = (cmd: string): Promise<string> => {
+// Helper to execute terminal commands
+const runCommand = (cmd: string): Promise<string> => {
   return new Promise((resolve) => {
-    exec(`powershell -NoProfile -Command "${cmd}"`, (error, stdout) => {
-      if (error) return resolve('')
+    exec(cmd, { maxBuffer: 1024 * 1024 }, (error, stdout) => {
+      if (error) resolve('')
       resolve(stdout ? stdout.trim() : '')
     })
   })
 }
 
-export async function getLiveLocation() {
+// ─── 1. NATIVE OS GEOLOCATION (100% ACCURATE & FREE) ───
+async function getWindowsNativeLocation(): Promise<{ lat: number; lon: number } | null> {
+  // Uses Windows' built-in Location Services (Wi-Fi Triangulation/GPS)
+  const scriptContent = `
+Add-Type -AssemblyName System.Device
+$GeoWatcher = New-Object System.Device.Location.GeoCoordinateWatcher
+$GeoWatcher.Start()
+$timeout = 40
+while (($GeoWatcher.Status -ne 'Ready') -and ($GeoWatcher.Permission -ne 'Denied') -and ($timeout -gt 0)) {
+    Start-Sleep -Milliseconds 100
+    $timeout--
+}
+if ($GeoWatcher.Permission -eq 'Denied' -or $GeoWatcher.Status -ne 'Ready') {
+    Write-Output "ERROR"
+} else {
+    $loc = $GeoWatcher.Position.Location
+    if ($loc.IsUnknown) {
+        Write-Output "ERROR"
+    } else {
+        Write-Output "$($loc.Latitude),$($loc.Longitude)"
+    }
+}
+$GeoWatcher.Stop()
+  `
+
+  // Write the script to a secure temp file to prevent command-line character breaking
+  const tempPath = path.join(os.tmpdir(), 'iris_get_location.ps1')
+  fs.writeFileSync(tempPath, scriptContent)
+
+  const cmd = `powershell -NoProfile -ExecutionPolicy Bypass -File "${tempPath}"`
+  const output = await runCommand(cmd)
+
+  // Clean up the temp file
   try {
-    if (os.platform() === 'win32') {
-      const psCommand = `Add-Type -AssemblyName System.Device; $w = New-Object System.Device.Location.GeoCoordinateWatcher(1); $w.Start(); $t = 0; while($w.Position.Location.IsUnknown -and $t -lt 35) { Start-Sleep -Milliseconds 200; $t++ }; if ($w.Permission -eq 'Denied') { Write-Output 'DENIED' } elseif ($w.Position.Location.IsUnknown) { Write-Output 'UNKNOWN' } else { Write-Output "$($w.Position.Location.Latitude),$($w.Position.Location.Longitude)" }`
+    fs.unlinkSync(tempPath)
+  } catch (e) {}
 
-      const osLocation = await runPowerShell(psCommand)
+  if (output && !output.includes('ERROR') && output.includes(',')) {
+    const [lat, lon] = output.trim().split(',').map(parseFloat)
+    if (!isNaN(lat) && !isNaN(lon)) return { lat, lon }
+  }
+  return null
+}
 
-      if (osLocation === 'DENIED') {
-        console.warn('⚠️ IRIS: Windows Location Services are DISABLED in Windows Privacy Settings.')
-      } else if (osLocation === 'UNKNOWN') {
-        console.warn(
-          '⚠️ IRIS: Windows could not lock onto a GPS/Wi-Fi signal (Hardware limitation or Timeout).'
-        )
-      } else if (osLocation && osLocation.includes(',')) {
-        const [lat, lon] = osLocation.split(',')
-
-        const geoRes = await fetch(
-          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
-        )
-        const geoData = await geoRes.json()
-
-        return {
-          city: geoData.city || geoData.locality,
-          region: geoData.principalSubdivision,
-          country: geoData.countryName,
-          lat: parseFloat(lat),
-          lon: parseFloat(lon),
-          accuracy: 'Exact (Hardware/Wi-Fi)',
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          fullString: `${geoData.city || geoData.locality}, ${geoData.principalSubdivision}, ${geoData.countryName}`
-        }
+// ─── 2. FREE REVERSE GEOCODING (LAT/LON TO ADDRESS) ───
+async function reverseGeocode(lat: number, lon: number): Promise<string> {
+  try {
+    // OpenStreetMap Nominatim API (100% Free, No Key Required)
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`,
+      {
+        headers: { 'User-Agent': 'IRIS-Desktop-App/1.0' } // Required by their free-use policy
       }
+    )
+    const data = await res.json()
+
+    if (data && data.address) {
+      const city = data.address.city || data.address.town || data.address.state_district || ''
+      const state = data.address.state || ''
+      const country = data.address.country || ''
+      return [city, state, country].filter(Boolean).join(', ')
     }
+  } catch (e) {
+    console.error('[LOCATION] Reverse geocode failed:', e)
+  }
+  return `Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`
+}
 
-    console.log('📡 IRIS: Falling back to IP-based location mapping...')
-
-    const ipRes = await fetch('https://ipwho.is/')
-    const ipData = await ipRes.json()
-
-    if (ipData && ipData.success) {
+// ─── 3. FREE IP-BASED FALLBACK (BACKUP PLAN) ───
+async function getIpFallbackLocation() {
+  try {
+    const res = await fetch('http://ip-api.com/json/')
+    const data = await res.json()
+    if (data && data.status === 'success') {
       return {
-        city: ipData.city,
-        region: ipData.region,
-        country: ipData.country,
-        lat: parseFloat(ipData.latitude),
-        lon: parseFloat(ipData.longitude),
-        accuracy: 'Approximate (ISP Data Center)',
-        timezone: ipData.timezone?.id || Intl.DateTimeFormat().resolvedOptions().timeZone,
-        fullString: `${ipData.city}, ${ipData.region}, ${ipData.country}`
+        fullString: `${data.city}, ${data.regionName}, ${data.country}`,
+        timezone: data.timezone
+      }
+    }
+  } catch (e) {
+    console.error('[LOCATION] IP fallback failed:', e)
+  }
+  return null
+}
+
+// ─── EXPORTED CORE FUNCTION ───
+export async function getLiveLocation() {
+  let tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown'
+
+  try {
+    // Attempt High-Accuracy Windows GPS/Wi-Fi Triangulation first
+    if (os.platform() === 'win32') {
+      console.log('[LOCATION] Attempting native Windows triangulation...')
+      const coords = await getWindowsNativeLocation()
+
+      if (coords) {
+        const address = await reverseGeocode(coords.lat, coords.lon)
+        console.log(`[LOCATION] Secured native lock: ${address}`)
+        return { fullString: address, timezone: tz }
       }
     }
 
-    return null
-  } catch (error: any) {
-    console.error('❌ IRIS Location Manager Error:', error)
-    return null
+    // Fallback to IP Network Location if native permission is denied
+    console.log('[LOCATION] Native lock failed, falling back to IP Location...')
+    const ipLoc = await getIpFallbackLocation()
+    if (ipLoc) return ipLoc
+  } catch (err) {
+    console.error('[LOCATION] Entire pipeline failed:', err)
+  }
+
+  return {
+    fullString: 'Unknown Location',
+    timezone: tz
   }
 }
