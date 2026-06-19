@@ -103,7 +103,6 @@ export async function getLiveLocation() {
   let tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown'
 
   try {
-    // Attempt High-Accuracy Windows GPS/Wi-Fi Triangulation first
     if (os.platform() === 'win32') {
       console.log('[LOCATION] Attempting native Windows triangulation...')
       const coords = await getWindowsNativeLocation()
