@@ -27,9 +27,9 @@ global
 eng.traineddata
 
 agents
+IRISB.tsx
 
 tools.ts
-IRISB.tsx
 AICoreSphere.tsx
 mobile-manager.ts
 voice
