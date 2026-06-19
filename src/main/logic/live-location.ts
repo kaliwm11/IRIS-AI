@@ -81,7 +81,6 @@ async function reverseGeocode(lat: number, lon: number): Promise<string> {
   return `Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`
 }
 
-// ─── 3. FREE IP-BASED FALLBACK (BACKUP PLAN) ───
 async function getIpFallbackLocation() {
   try {
     const res = await fetch('http://ip-api.com/json/')
